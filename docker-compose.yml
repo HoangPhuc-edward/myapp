@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./server
+    ports:
+      - "5000:5000"
+    networks:
+      - mynetwork
+    volumes:
+      - ./server:/app
+    
+    command: >
+      sh -c "npm install && npm run dev"
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: hoangphuc
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: hoangphuc
+      MYSQL_PASSWORD: hoangphuc
+    ports:
+      - "3307:3306"  
+    networks:
+      - mynetwork
+
+  frontend:
+    build: ./client
+    ports:
+      - "3000:3000"
+    networks:
+      - mynetwork
+    depends_on:
+      - backend
+    volumes:
+      - ./client:/app
+      # - /app/node_modules # Prevents node_modules from being overwritten
+    command: >
+      sh -c "npm install && npm start"
+
+networks:
+  mynetwork:
+    driver: bridge
