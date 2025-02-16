@@ -15,7 +15,7 @@ class WardService {
 
   static async getWardsByAttribute(attribute, value) {
     try {
-      const query = `SELECT MaSo, Ten FROM my_database.PHUONG_XA WHERE ${attribute} = ${value};`;
+      const query = `SELECT * FROM my_database.PHUONG_XA WHERE ${attribute} = ${value};`;
       const [rows] = await pool.execute(query);
       return rows;
     } catch (err) {

@@ -13,7 +13,6 @@ const addValuesToDB = async (api, api_data) => {
     }
 
     const data = await response.json();
-    console.log(data);
     return data.insertId;
   } catch (error) {
     console.error("Error:", error);
@@ -32,17 +31,6 @@ const getRoleByEmail = async (email) => {
     });
 };
 
-const getDataByTableName = async (table_name) => {
-  try {
-    const response = await fetch(`http://localhost:5000/data/${table_name}`);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error:", error);
-    throw error;
-  }
-};
-
 const getValuesFromDB = async (api) => {
   try {
     const response = await fetch(`http://localhost:5000/${api}`);
@@ -54,4 +42,4 @@ const getValuesFromDB = async (api) => {
   }
 };
 
-export { addValuesToDB, getRoleByEmail, getDataByTableName, getValuesFromDB };
+export { addValuesToDB, getRoleByEmail, getValuesFromDB };

@@ -1,139 +1,14 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { auth } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { jsonToNameValueTuple } from "../../utils/format";
-import { addValuesToDB } from "../../api/api";
-import { useParams } from "react-router-dom";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const VolunteerInfo = () => {
-  const { id } = useParams();
-
-  const [provincesList, getProvincesList] = useState([]);
-  const [districtsList, getDistrictsList] = useState([]);
-  const [wardsList, getWardsList] = useState([]);
-  const [formData, setFormData] = useState({
-    HoTen: "",
-    SDT: "",
-    NgaySinh: "",
-    GioiTinh: "Nam",
-    SoNha: "",
-    TenDuong: "",
-    KhuVuc: "",
-    MaPhuongXa: "",
-    district: "",
-    city: "",
-  });
-
-  const addUserToDatabase = async (formData) => {
-    console.log(id);
-
-    // Them Dia Chi va Lay ID
-    const addressData = {
-      SoNha: formData.SoNha,
-      TenDuong: formData.TenDuong,
-      KhuVuc: formData.KhuVuc,
-      MaPhuongXa: formData.MaPhuongXa,
-    };
-    const addressTuple = jsonToNameValueTuple(addressData);
-    const addressBody = {
-      table_name: "DIA_CHI",
-      attributes: addressTuple.name,
-      values: addressTuple.value,
-    };
-
-    const addressId = await addValuesToDB(
-      addressBody.table_name,
-      addressBody.attributes,
-      addressBody.values
-    );
-
-    const userData = {
-      HoTen: formData.HoTen,
-      SDT: formData.SDT,
-      NgaySinh: formData.NgaySinh,
-      GioiTinh: formData.GioiTinh,
-      MaTaiKhoan: id,
-      MaDiaChi: addressId,
-    };
-
-    const userTuple = jsonToNameValueTuple(userData);
-    const userBody = {
-      table_name: "TINH_NGUYEN_VIEN",
-      attributes: userTuple.name,
-      values: userTuple.value,
-    };
-
-    const userId = await addValuesToDB(
-      userBody.table_name,
-      userBody.attributes,
-      userBody.values
-    );
-    if (userId) alert(`Đăng ký tài khoản thành công: ${userId}`);
-    else alert("Lỗi đăng ký tài khoản!");
-  };
-
-  const fetchProvincesList = async () => {
-    fetch("http://localhost:5000/provinces")
-      .then((response) => response.json())
-      .then((data) => {
-        getProvincesList(data.map((province) => province));
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
-
-  const fetchDistrictsList = async (province) => {
-    fetch(`http://localhost:5000/districts/${province}`)
-      .then((response) => response.json())
-      .then((data) => {
-        getDistrictsList(data.map((district) => district));
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
-
-  const fetchwardsList = async (district) => {
-    fetch(`http://localhost:5000/wards/${district}`)
-      .then((response) => response.json())
-      .then((data) => {
-        getWardsList(data.map((ward) => ward));
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
-
-  useEffect(() => {
-    fetchProvincesList();
-  }, []);
-  useEffect(() => {
-    fetchDistrictsList(formData.city);
-  }, [formData.city]);
-  useEffect(() => {
-    fetchwardsList(formData.district);
-  }, [formData.district]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    addUserToDatabase(formData);
-  };
-
+const VolunteerForm = ({
+  provincesList,
+  districtsList,
+  wardsList,
+  formData,
+  handleChange,
+  handleSubmit,
+}) => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -279,4 +154,4 @@ const VolunteerInfo = () => {
   );
 };
 
-export default VolunteerInfo;
+export default VolunteerForm;

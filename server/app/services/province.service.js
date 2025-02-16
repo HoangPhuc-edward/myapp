@@ -4,7 +4,7 @@ class ProvinceService {
   static async getAllProvinces() {
     try {
       const [rows] = await pool.execute(
-        "SELECT MaSo, Ten FROM my_database.TINH_THANH;"
+        "SELECT * FROM my_database.TINH_THANH;"
       );
       return rows;
     } catch (err) {
@@ -16,8 +16,7 @@ class ProvinceService {
   static async getProvinceByAttributes(attributes, values) {
     try {
       const [rows] = await pool.execute(
-        `SELECT MaSo, Ten FROM my_database.TINH_THANH WHERE ${attributes} = ?;`,
-        values
+        `SELECT * FROM my_database.TINH_THANH WHERE ${attributes} = ${values};`
       );
       return rows;
     } catch (err) {

@@ -26,6 +26,7 @@ class EventController {
         MaToChuc,
         TenSuKien,
         MieuTa,
+        NgayDang,
         NgayBatDau,
         NgayKetThuc,
         SoLuongToiDa,
@@ -35,6 +36,7 @@ class EventController {
         !MaToChuc ||
         !TenSuKien ||
         !MieuTa ||
+        !NgayDang ||
         !NgayBatDau ||
         !NgayKetThuc ||
         !SoLuongToiDa ||
@@ -47,6 +49,7 @@ class EventController {
         MaToChuc,
         TenSuKien,
         MieuTa,
+        NgayDang,
         NgayBatDau,
         NgayKetThuc,
         SoLuongToiDa,

@@ -1,10 +1,9 @@
 import { isValidEmail, isShorterThan } from "../../utils/validationUtils";
-
-import { checkEmailExists, registerUser } from "../../firebase/auth";
+import { registerUser } from "../../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { addAccount } from "../../api/accountApi";
 import { getAuth } from "firebase/auth";
+import AccountApi from "../../api/accountApi";
 
 export const useRegisterLogic = () => {
   const [email, setEmail] = useState("");
@@ -44,7 +43,7 @@ export const useRegisterLogic = () => {
       return;
     }
 
-    const accountId = await addAccount(email, accountType);
+    const accountId = await AccountApi.addAccount(email, accountType);
 
     console.log("Account id: ", accountId);
 

@@ -4,7 +4,7 @@ class DistrictService {
   static async getAllDistricts() {
     try {
       const [rows] = await pool.execute(
-        "SELECT MaSo, Ten FROM my_database.QUAN_HUYEN;"
+        "SELECT * FROM my_database.QUAN_HUYEN;"
       );
       return rows;
     } catch (err) {
@@ -15,7 +15,7 @@ class DistrictService {
 
   static async getDistrictByAttribute(attribute, value) {
     try {
-      const query = `SELECT MaSo, Ten FROM my_database.QUAN_HUYEN WHERE ${attribute} = ${value};`;
+      const query = `SELECT * FROM my_database.QUAN_HUYEN WHERE ${attribute} = ${value};`;
       const [rows] = await pool.execute(query);
       return rows;
     } catch (err) {

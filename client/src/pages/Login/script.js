@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { handleLogin } from "../../firebase/auth";
-import { getRoleByEmail } from "../../api/accountApi";
+
 import { useNavigate } from "react-router-dom";
+import AccountApi from "../../api/accountApi";
 
 export const useLoginLogic = () => {
   const [email, setEmail] = useState("");
@@ -11,9 +12,9 @@ export const useLoginLogic = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     handleLogin(email, password);
-    const roleid = await getRoleByEmail(email);
+    const roleid = await AccountApi.getRoleByEmail(email);
     if (roleid === 2) {
-      navigate(`/org-home`);
+      navigate(`/org-home/1`);
     } else navigate(`/vol-home`);
   };
 

@@ -1,150 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useOrgInfoLogic } from "./script";
+import OrgForm from "../../components/OrgForm";
 
 const OrgInfo = () => {
   const {
-    provincesList,
-    districtsList,
-    wardsList,
+    // provincesList,
+    // districtsList,
+    // wardsList,
     formData,
     handleChange,
     handleSubmit,
   } = useOrgInfoLogic();
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-8">
-          <div className="card">
-            <div className="card-header">
-              <h2 className="text-center">Thông tin tổ chức</h2>
-            </div>
-            <div className="card-body">
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label">Tên tổ chức</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="Ten"
-                    value={formData.Ten}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Miêu tả tổ chức</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="MieuTa"
-                    value={formData.MieuTa}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Số điện thoại:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="SDT"
-                    value={formData.SDT}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Số nhà</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="SoNha"
-                    value={formData.SoNha}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Tên đường</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="TenDuong"
-                    value={formData.TenDuong}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Khu vực</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="KhuVuc"
-                    value={formData.KhuVuc}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Tỉnh/Thành phố</label>
-                  <select
-                    className="form-select"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Chọn tỉnh/thành phố</option>
-                    {provincesList.map((province) => (
-                      <option key={province.MaSo} value={province.MaSo}>
-                        {province.Ten}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Quận/Huyện</label>
-                  <select
-                    className="form-select"
-                    name="district"
-                    value={formData.district}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Chọn quận/huyện</option>
-                    {districtsList.map((district) => (
-                      <option key={district.MaSo} value={district.MaSo}>
-                        {district.Ten}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Xã/Phường</label>
-                  <select
-                    className="form-select"
-                    name="MaPhuongXa"
-                    value={formData.MaPhuongXa}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Chọn xã/phường</option>
-                    {wardsList.map((ward) => (
-                      <option key={ward.MaSo} value={ward.MaSo}>
-                        {ward.Ten}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <button type="submit" className="btn btn-primary w-100">
-                  Lưu thông tin
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <OrgForm
+      // provincesList={provincesList}
+      // districtsList={districtsList}
+      // wardsList={wardsList}
+      formData={formData}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+    />
   );
 };
 

@@ -1,4 +1,4 @@
-import { addValuesToDB } from "./api";
+import { addValuesToDB, getValuesFromDB } from "./api";
 
 class AddressApi {
   static async addAddress(data) {
@@ -11,6 +11,11 @@ class AddressApi {
     };
 
     return await addValuesToDB("addresses", JSON.stringify(addressData));
+  }
+
+  static async getAddressById(id) {
+    const address = await getValuesFromDB(`addresses/${id}`);
+    return address[0];
   }
 }
 

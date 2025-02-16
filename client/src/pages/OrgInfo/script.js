@@ -49,20 +49,20 @@ export const useOrgInfoLogic = () => {
     } else alert("Lỗi đăng ký tài khoản!");
   };
 
-  const { data: provincesList } = useFetch(
-    "http://localhost:5000/provinces",
-    []
-  );
+  // const { data: provincesList } = useFetch(
+  //   "http://localhost:5000/provinces",
+  //   []
+  // );
 
-  const { data: districtsList } = useFetch(
-    `http://localhost:5000/districts/province/${formData.city}`,
-    [formData.city]
-  );
+  // const { data: districtsList } = useFetch(
+  //   `http://localhost:5000/districts/province/${formData.city}`,
+  //   [formData.city]
+  // );
 
-  const { data: wardsList } = useFetch(
-    `http://localhost:5000/wards/district/${formData.district}`,
-    [formData.district]
-  );
+  // const { data: wardsList } = useFetch(
+  //   `http://localhost:5000/wards/district/${formData.district}`,
+  //   [formData.district]
+  // );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -79,9 +79,9 @@ export const useOrgInfoLogic = () => {
   };
 
   return {
-    provincesList,
-    districtsList,
-    wardsList,
+    // provincesList,
+    // districtsList,
+    // wardsList,
     formData,
     handleChange,
     handleSubmit,

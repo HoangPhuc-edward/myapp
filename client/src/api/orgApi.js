@@ -1,4 +1,4 @@
-import { addValuesToDB } from "./api";
+import { addValuesToDB, getValuesFromDB } from "./api";
 
 class OrgApi {
   static async addOrg(data) {
@@ -11,6 +11,11 @@ class OrgApi {
     };
 
     return await addValuesToDB("orgs", JSON.stringify(orgData));
+  }
+
+  static async getOrgById(id) {
+    const org = await getValuesFromDB(`orgs/${id}`);
+    return org[0];
   }
 }
 
