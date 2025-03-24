@@ -3,7 +3,6 @@ import { registerUser } from "../../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
-import AccountApi from "../../api/accountApi";
 
 export const useRegisterLogic = () => {
   const [email, setEmail] = useState("");
@@ -43,12 +42,9 @@ export const useRegisterLogic = () => {
       return;
     }
 
-    const accountId = await AccountApi.addAccount(email, accountType);
-
-    console.log("Account id: ", accountId);
-
-    if (accountType === 1) navigate(`/vol-info/${accountId}`);
-    else navigate(`/org-info/${accountId}`);
+    if (accountType === 1)
+      navigate(`/vol-info`, { state: { user_email: email } });
+    else navigate(`/org-info`, { state: { user_email: email } });
   };
 
   const handleTypeChange = (e) => {

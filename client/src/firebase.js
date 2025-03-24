@@ -1,8 +1,7 @@
-// src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCdZ2nnbaGy5OnTXmdHQZILxRrW4Z_Q-7o",
   authDomain: "open-heart-31eb3.firebaseapp.com",
@@ -13,8 +12,8 @@ const firebaseConfig = {
   measurementId: "G-DHV9PH378L",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app); // Chỉ dùng nếu bạn cần Firebase Authentication
+const auth = getAuth(app);
+const storage = getStorage(app);
 
-export { app, auth };
+export { app, auth, storage };

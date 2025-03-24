@@ -6,6 +6,7 @@ import Register from "./pages/Register/index";
 import OrgInfo from "./pages/OrgInfo/index";
 import VolunteerInfo from "./pages/VolunteerInfo";
 import OrgHome from "./pages/OrgHome";
+import VolHome from "./pages/VolHome";
 
 import {
   BrowserRouter as Router,
@@ -21,9 +22,10 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/org-info/:id" element={<OrgInfo />} />
-        <Route path="/vol-info/:id" element={<VolunteerInfo />} />
-        <Route path="/org-home/:id" element={<OrgHome />} />
+        <Route path="/org-info" element={<OrgInfo />} />
+        <Route path="/vol-info" element={<VolunteerInfo />} />
+        <Route path="/org-home" element={<OrgHome />} />
+        <Route path="/vol-home" element={<VolHome />} />
       </Routes>
     </Router>
   );

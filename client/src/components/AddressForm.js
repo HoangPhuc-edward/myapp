@@ -1,13 +1,7 @@
 import React from "react";
 import useFetch from "../hooks/useFetch";
 
-const AddressForm = ({
-  formData,
-  handleChange,
-  //   provincesList,
-  //   districtsList,
-  //   wardsList,
-}) => {
+const AddressForm = ({ formData, handleChange }) => {
   const { data: provincesList } = useFetch(
     "http://localhost:5000/provinces",
     []
@@ -24,38 +18,49 @@ const AddressForm = ({
   );
   return (
     <>
-      <div className="mb-3">
-        <label className="form-label">Số nhà</label>
-        <input
-          type="text"
-          className="form-control"
-          name="SoNha"
-          value={formData.SoNha}
-          onChange={handleChange}
-        />
+      <div className="row mb-3">
+        <div className="col-md-4">
+          <label className="form-label" style={{ fontWeight: "bold" }}>
+            Số nhà
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            name="SoNha"
+            value={formData.SoNha}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="col-md-4">
+          <label className="form-label" style={{ fontWeight: "bold" }}>
+            Tên đường
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            name="TenDuong"
+            value={formData.TenDuong}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="col-md-4">
+          <label className="form-label" style={{ fontWeight: "bold" }}>
+            Khu vực
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            name="KhuVuc"
+            value={formData.KhuVuc}
+            onChange={handleChange}
+          />
+        </div>
       </div>
+
       <div className="mb-3">
-        <label className="form-label">Tên đường</label>
-        <input
-          type="text"
-          className="form-control"
-          name="TenDuong"
-          value={formData.TenDuong}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Khu vực</label>
-        <input
-          type="text"
-          className="form-control"
-          name="KhuVuc"
-          value={formData.KhuVuc}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Tỉnh/Thành phố</label>
+        <label className="form-label" style={{ fontWeight: "bold" }}>
+          Tỉnh/Thành phố
+        </label>
         <select
           className="form-select"
           name="city"
@@ -72,7 +77,9 @@ const AddressForm = ({
         </select>
       </div>
       <div className="mb-3">
-        <label className="form-label">Quận/Huyện</label>
+        <label className="form-label" style={{ fontWeight: "bold" }}>
+          Quận/Huyện
+        </label>
         <select
           className="form-select"
           name="district"
@@ -89,7 +96,9 @@ const AddressForm = ({
         </select>
       </div>
       <div className="mb-3">
-        <label className="form-label">Xã/Phường</label>
+        <label className="form-label" style={{ fontWeight: "bold" }}>
+          Xã/Phường
+        </label>
         <select
           className="form-select"
           name="MaPhuongXa"

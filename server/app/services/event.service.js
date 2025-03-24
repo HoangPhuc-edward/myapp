@@ -30,12 +30,13 @@ class EventService {
     NgayBatDau,
     NgayKetThuc,
     SoLuongToiDa,
-    MaDiaDiem
+    MaDiaDiem,
+    HinhAnh
   ) {
     try {
       const query =
-        `INSERT INTO my_database.SU_KIEN (MaToChuc, TenSuKien, MieuTa, NgayDang, NgayBatDau, NgayKetThuc, SoLuongToiDa, MaDiaDiem)` +
-        ` VALUES (${MaToChuc}, '${TenSuKien}', '${MieuTa}', '${NgayDang}', '${NgayBatDau}', '${NgayKetThuc}', ${SoLuongToiDa}, ${MaDiaDiem});`;
+        `INSERT INTO my_database.SU_KIEN (MaToChuc, TenSuKien, MieuTa, NgayDang, NgayBatDau, NgayKetThuc, SoLuongToiDa, MaDiaDiem, HinhAnh)` +
+        ` VALUES (${MaToChuc}, '${TenSuKien}', '${MieuTa}', '${NgayDang}', '${NgayBatDau}', '${NgayKetThuc}', ${SoLuongToiDa}, ${MaDiaDiem}, '${HinhAnh}');`;
       const [rows] = await pool.execute(query);
       return rows;
     } catch (err) {

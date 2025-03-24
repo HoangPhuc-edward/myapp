@@ -31,6 +31,7 @@ class EventController {
         NgayKetThuc,
         SoLuongToiDa,
         MaDiaDiem,
+        HinhAnh,
       } = req.body;
       if (
         !MaToChuc ||
@@ -40,7 +41,8 @@ class EventController {
         !NgayBatDau ||
         !NgayKetThuc ||
         !SoLuongToiDa ||
-        !MaDiaDiem
+        !MaDiaDiem ||
+        !HinhAnh
       ) {
         return res.status(400).json({ message: "Missing required fields" });
       }
@@ -53,7 +55,8 @@ class EventController {
         NgayBatDau,
         NgayKetThuc,
         SoLuongToiDa,
-        MaDiaDiem
+        MaDiaDiem,
+        HinhAnh
       );
       res.status(201).json(event);
     } catch (error) {

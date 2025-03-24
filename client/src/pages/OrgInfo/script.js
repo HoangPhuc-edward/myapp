@@ -1,12 +1,14 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import AddressApi from "../../api/addressApi";
-import useFetch from "../../hooks/useFetch";
 import OrgApi from "../../api/orgApi";
+import { uploadImage } from "../../firebase/storage";
 
 export const useOrgInfoLogic = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state.user_email;
+  const [img, setImg] = useState(null);
 
   const [formData, setFormData] = useState({
     Ten: "",
@@ -20,6 +22,8 @@ export const useOrgInfoLogic = () => {
 
     district: "",
     city: "",
+    email: email,
+    HinhAnh: "",
   });
 
   const addOrgToDatabase = async (formData) => {
@@ -38,7 +42,8 @@ export const useOrgInfoLogic = () => {
       MieuTa: formData.MieuTa,
       SDT: formData.SDT,
       MaDiaChi: addressId,
-      MaTaiKhoan: id,
+      Email: email,
+      HinhAnh: formData.HinhAnh,
     };
 
     const userId = await OrgApi.addOrg(orgData);
@@ -49,20 +54,9 @@ export const useOrgInfoLogic = () => {
     } else alert("Lỗi đăng ký tài khoản!");
   };
 
-  // const { data: provincesList } = useFetch(
-  //   "http://localhost:5000/provinces",
-  //   []
-  // );
-
-  // const { data: districtsList } = useFetch(
-  //   `http://localhost:5000/districts/province/${formData.city}`,
-  //   [formData.city]
-  // );
-
-  // const { data: wardsList } = useFetch(
-  //   `http://localhost:5000/wards/district/${formData.district}`,
-  //   [formData.district]
-  // );
+  const handleImageChange = (event) => {
+    setImg(event.target.files[0]);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,18 +66,17 @@ export const useOrgInfoLogic = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const url = await uploadImage(img);
+    formData.HinhAnh = url;
     addOrgToDatabase(formData);
   };
 
   return {
-    // provincesList,
-    // districtsList,
-    // wardsList,
     formData,
     handleChange,
     handleSubmit,
+    handleImageChange,
   };
 };

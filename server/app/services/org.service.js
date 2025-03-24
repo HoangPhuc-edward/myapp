@@ -22,9 +22,9 @@ class OrgService {
     }
   }
 
-  static async insertOrg(Ten, MieuTa, SDT, MaDiaChi, MaTaiKhoan) {
+  static async insertOrg(Ten, MieuTa, SDT, MaDiaChi, Email, HinhAnh) {
     try {
-      const query = `INSERT INTO my_database.TO_CHUC (Ten, MieuTa, SDT, MaDiaChi, MaTaiKhoan) VALUES ('${Ten}', '${MieuTa}', '${SDT}', ${MaDiaChi}, ${MaTaiKhoan});`;
+      const query = `INSERT INTO my_database.TO_CHUC (Ten, MieuTa, SDT, MaDiaChi, Email, HinhAnh) VALUES ('${Ten}', '${MieuTa}', '${SDT}', ${MaDiaChi}, '${Email}', '${HinhAnh}');`;
       const [rows] = await pool.execute(query);
       return rows;
     } catch (error) {

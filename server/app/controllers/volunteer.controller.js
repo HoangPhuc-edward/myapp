@@ -4,7 +4,7 @@ class VolunteerController {
   static async getAllVolunteers(req, res) {
     try {
       const volunteers = await VolunteerService.getVolunteers();
-      return res.status(200).json({ volunteers });
+      return res.status(200).json(volunteers);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -14,10 +14,10 @@ class VolunteerController {
     try {
       const id = req.params.id;
       const volunteer = await VolunteerService.getVolunteersByAttribute(
-        "id",
+        "MaSo",
         id
       );
-      return res.status(200).json({ volunteer });
+      return res.status(200).json(volunteer);
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -25,14 +25,16 @@ class VolunteerController {
 
   static async createVolunteer(req, res) {
     try {
-      const { HoTen, NgaySinh, SDT, GioiTinh, MaDiaChi, MaTaiKhoan } = req.body;
+      const { HoTen, NgaySinh, SDT, GioiTinh, MaDiaChi, Email, HinhAnh } =
+        req.body;
       if (
         !HoTen ||
         !NgaySinh ||
         !SDT ||
         !GioiTinh ||
         !MaDiaChi ||
-        !MaTaiKhoan
+        !Email ||
+        !HinhAnh
       ) {
         return res.status(400).json({ error: "Missing required information" });
       }
@@ -42,7 +44,8 @@ class VolunteerController {
         SDT,
         GioiTinh,
         MaDiaChi,
-        MaTaiKhoan
+        Email,
+        HinhAnh
       );
       return res.status(201).json(volunteer);
     } catch (err) {

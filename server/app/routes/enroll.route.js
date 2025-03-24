@@ -6,6 +6,9 @@ router
   .route("/")
   .get(EnrollController.getAllEnrolls)
   .post(EnrollController.createEnroll);
+
 router.get("/:id", EnrollController.getEnrollsById);
+router.get("/msk/:id", EnrollController.getEnrollByMSK);
+router.delete("/:id", EnrollController.deleteEnroll);
 
 module.exports = router;

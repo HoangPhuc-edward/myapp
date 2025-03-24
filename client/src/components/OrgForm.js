@@ -1,27 +1,39 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddressForm from "./AddressForm";
+import font from "../assets/font";
+import color from "../assets/color";
 
 const OrgForm = ({
-  // provincesList,
-  // districtsList,
-  // wardsList,
   formData,
   handleChange,
   handleSubmit,
+  handleImageChange,
 }) => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className="card">
-            <div className="card-header">
-              <h2 className="text-center">Thông tin tổ chức</h2>
-            </div>
+          <div
+            className="card"
+            style={{
+              backgroundColor: "transparent",
+              color: "white",
+              border: "none",
+            }}
+          >
+            <h1
+              className="text-center text-uppercase"
+              style={{ fontFamily: font.monsterrat, fontWeight: "bold" }}
+            >
+              Thông tin tổ chức
+            </h1>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label className="form-label">Tên tổ chức</label>
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Tên tổ chức
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -29,10 +41,13 @@ const OrgForm = ({
                     value={formData.Ten}
                     onChange={handleChange}
                     required
+                    style={{ backgroundColor: "white" }}
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Miêu tả tổ chức</label>
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Miêu tả tổ chức
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -40,10 +55,13 @@ const OrgForm = ({
                     value={formData.MieuTa}
                     onChange={handleChange}
                     required
+                    style={{ backgroundColor: "white" }}
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Số điện thoại:</label>
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Số điện thoại:
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -51,16 +69,31 @@ const OrgForm = ({
                     value={formData.SDT}
                     onChange={handleChange}
                     required
+                    style={{ backgroundColor: "white" }}
                   />
                 </div>
-                <AddressForm
-                  formData={formData}
-                  handleChange={handleChange}
-                  // provincesList={provincesList}
-                  // districtsList={districtsList}
-                  // wardsList={wardsList}
-                />
-                <button type="submit" className="btn btn-primary w-100">
+                <div className="mb-3">
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Hình ảnh sự kiện
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    onChange={handleImageChange}
+                  />
+                </div>
+                <AddressForm formData={formData} handleChange={handleChange} />
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100"
+                  style={{
+                    backgroundColor: color.primary,
+                    color: "#fff",
+                    borderRadius: "1rem",
+                    padding: "0.8rem",
+                    border: "none",
+                  }}
+                >
                   Lưu thông tin
                 </button>
               </form>

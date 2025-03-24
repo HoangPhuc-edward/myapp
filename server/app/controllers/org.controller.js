@@ -22,8 +22,8 @@ class OrgController {
 
   static async createOrg(req, res) {
     try {
-      const { Ten, MieuTa, SDT, MaDiaChi, MaTaiKhoan } = req.body;
-      if (!Ten || !MieuTa || !SDT || !MaDiaChi || !MaTaiKhoan) {
+      const { Ten, MieuTa, SDT, MaDiaChi, Email, HinhAnh } = req.body;
+      if (!Ten || !MieuTa || !SDT || !MaDiaChi || !Email || !HinhAnh) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
@@ -32,7 +32,8 @@ class OrgController {
         MieuTa,
         SDT,
         MaDiaChi,
-        MaTaiKhoan
+        Email,
+        HinhAnh
       );
       res.status(201).json(org);
     } catch (error) {

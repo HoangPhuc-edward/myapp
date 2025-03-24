@@ -25,7 +25,7 @@ const useFetch = (url, dependencies = []) => {
     };
 
     fetchData();
-  }, dependencies); // Chỉ chạy lại khi dependencies thay đổi
+  }, dependencies);
 
   return { data, loading, error };
 };

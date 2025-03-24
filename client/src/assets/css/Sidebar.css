@@ -1,0 +1,26 @@
+
+.sidebar-item {
+    cursor: pointer;
+    border: none;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    background-color: white;
+    color: black;
+    transition: background-color 0.3s, color 0.3s;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    
+}
+
+.sidebar-item:hover {
+    background-color: #d1d1d144;
+}
+
+.sidebar-item.active {
+    background-color: #F2DCE3 !important;
+    color: #f1356d !important;
+}

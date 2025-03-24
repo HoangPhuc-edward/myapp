@@ -1,12 +1,15 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AddressApi from "../../api/addressApi";
 import VolunteerApi from "../../api/volunteerApi";
 import useFetch from "../../hooks/useFetch";
+import { uploadImage } from "../../firebase/storage";
 
 export const useVolunteerInfoLogic = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state.user_email;
+  const [img, setImg] = useState(null);
 
   const [formData, setFormData] = useState({
     HoTen: "",
@@ -19,6 +22,7 @@ export const useVolunteerInfoLogic = () => {
     MaPhuongXa: "",
     district: "",
     city: "",
+    email: email,
   });
 
   const addUserToDatabase = async (formData) => {
@@ -38,7 +42,8 @@ export const useVolunteerInfoLogic = () => {
       SDT: formData.SDT,
       GioiTinh: formData.GioiTinh,
       MaDiaChi: addressId,
-      MaTaiKhoan: id,
+      Email: formData.email,
+      HinhAnh: formData.HinhAnh,
     };
 
     const userId = await VolunteerApi.addVolunteer(userData);
@@ -49,21 +54,6 @@ export const useVolunteerInfoLogic = () => {
     } else alert("Lỗi đăng ký tài khoản!");
   };
 
-  const { data: provincesList } = useFetch(
-    "http://localhost:5000/provinces",
-    []
-  );
-
-  const { data: districtsList } = useFetch(
-    `http://localhost:5000/districts/province/${formData.city}`,
-    [formData.city]
-  );
-
-  const { data: wardsList } = useFetch(
-    `http://localhost:5000/wards/district/${formData.district}`,
-    [formData.district]
-  );
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -72,18 +62,22 @@ export const useVolunteerInfoLogic = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
+    const url = await uploadImage(img);
+    formData.HinhAnh = url;
     addUserToDatabase(formData);
   };
 
+  const handleImageChange = (event) => {
+    setImg(event.target.files[0]);
+  };
+
   return {
-    provincesList,
-    districtsList,
-    wardsList,
     formData,
     handleChange,
     handleSubmit,
+    handleImageChange,
   };
 };

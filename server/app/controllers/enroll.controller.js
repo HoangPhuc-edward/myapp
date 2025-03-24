@@ -20,6 +20,16 @@ class EnrollController {
     }
   }
 
+  static async getEnrollByMSK(req, res) {
+    try {
+      const id = req.params.id;
+      const enrolls = await EnrollService.getEnrollsByAttribute("MaSuKien", id);
+      res.status(200).json(enrolls);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   static async createEnroll(req, res) {
     try {
       const { NgayDangKy, MaSuKien, MaTNV } = req.body;
@@ -35,6 +45,16 @@ class EnrollController {
       res.status(201).json(enroll);
     } catch (error) {
       console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async deleteEnroll(req, res) {
+    try {
+      const id = req.params.id;
+      const enroll = await EnrollService.deleteEnroll(id);
+      res.status(200).json(enroll);
+    } catch (error) {
       res.status(500).json({ message: error.message });
     }
   }

@@ -3,7 +3,7 @@ const pool = require("../utils/mysql.util");
 class VolunteerService {
   static async getVolunteers() {
     try {
-      const [rows] = await pool.execute(
+      const [rows] = await pool.query(
         "SELECT * FROM my_database.TINH_NGUYEN_VIEN;"
       );
       return rows;
@@ -15,7 +15,7 @@ class VolunteerService {
 
   static async getVolunteersByAttribute(attribute, value) {
     try {
-      const [rows] = await pool.execute(
+      const [rows] = await pool.query(
         `SELECT * FROM my_database.TINH_NGUYEN_VIEN WHERE ${attribute} = ${value};`
       );
       return rows;
@@ -31,11 +31,12 @@ class VolunteerService {
     SDT,
     GioiTinh,
     MaDiaChi,
-    MaTaiKhoan
+    Email,
+    HinhAnh
   ) {
     try {
       const [rows] = await pool.execute(
-        `INSERT INTO my_database.TINH_NGUYEN_VIEN (HoTen, NgaySinh, SDT, GioiTinh, MaDiaChi, MaTaiKhoan) VALUES ('${HoTen}', '${NgaySinh}', '${SDT}', '${GioiTinh}', ${MaDiaChi}, ${MaTaiKhoan});`
+        `INSERT INTO my_database.TINH_NGUYEN_VIEN (HoTen, NgaySinh, SDT, GioiTinh, MaDiaChi,Email, HinhAnh) VALUES ('${HoTen}', '${NgaySinh}', '${SDT}', '${GioiTinh}', ${MaDiaChi}, '${Email}', '${HinhAnh}');`
       );
       return rows;
     } catch (err) {

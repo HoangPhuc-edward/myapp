@@ -1,26 +1,37 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import AddressForm from "./AddressForm";
+import font from "../assets/font";
+import color from "../assets/color";
 const VolunteerForm = ({
-  provincesList,
-  districtsList,
-  wardsList,
   formData,
   handleChange,
   handleSubmit,
+  handleImageChange,
 }) => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className="card">
-            <div className="card-header">
-              <h2 className="text-center">Thông tin cá nhân</h2>
-            </div>
+          <div
+            style={{
+              backgroundColor: "transparent",
+              color: "white",
+              border: "none",
+            }}
+          >
+            <h1
+              className="text-center text-uppercase"
+              style={{ fontFamily: font.monsterrat, fontWeight: "bold" }}
+            >
+              Thông tin cá nhân
+            </h1>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label className="form-label">Họ và tên:</label>
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Họ và tên:
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -31,7 +42,9 @@ const VolunteerForm = ({
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Giới tính:</label>
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Giới tính:
+                  </label>
                   <select
                     className="form-select"
                     name="GioiTinh"
@@ -44,7 +57,9 @@ const VolunteerForm = ({
                   </select>
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Ngày sinh:</label>
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Ngày sinh:
+                  </label>
                   <input
                     type="date"
                     className="form-control"
@@ -55,7 +70,9 @@ const VolunteerForm = ({
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Số điện thoại:</label>
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Số điện thoại:
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -66,83 +83,27 @@ const VolunteerForm = ({
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Số nhà</label>
+                  <label className="form-label" style={{ fontWeight: "bold" }}>
+                    Hình ảnh sự kiện
+                  </label>
                   <input
-                    type="text"
+                    type="file"
                     className="form-control"
-                    name="SoNha"
-                    value={formData.SoNha}
-                    onChange={handleChange}
-                  />
-                  <label className="form-label">Tên Đường</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="TenDuong"
-                    value={formData.TenDuong}
-                    onChange={handleChange}
-                  />
-                  <label className="form-label">Khu vực</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="KhuVuc"
-                    value={formData.KhuVuc}
-                    onChange={handleChange}
+                    onChange={handleImageChange}
                   />
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Tỉnh/Thành phố</label>
-                  <select
-                    className="form-select"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Chọn tỉnh/thành phố</option>
-                    {provincesList.map((province) => (
-                      <option key={province.MaSo} value={province.MaSo}>
-                        {province.Ten}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Quận/Huyện</label>
-                  <select
-                    className="form-select"
-                    name="district"
-                    value={formData.district}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Chọn quận/huyện</option>
-                    {districtsList.map((district) => (
-                      <option key={district.MaSo} value={district.MaSo}>
-                        {district.Ten}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Xã/Phường</label>
-                  <select
-                    className="form-select"
-                    name="MaPhuongXa"
-                    value={formData.MaPhuongXa}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Chọn xã/phường</option>
-                    {wardsList.map((ward) => (
-                      <option key={ward.MaSo} value={ward.MaSo}>
-                        {ward.Ten}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <button type="submit" className="btn btn-primary w-100">
+                <AddressForm formData={formData} handleChange={handleChange} />
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100"
+                  style={{
+                    backgroundColor: color.primary,
+                    color: "#fff",
+                    borderRadius: "1rem",
+                    padding: "0.8rem",
+                    border: "none",
+                  }}
+                >
                   Lưu thông tin
                 </button>
               </form>

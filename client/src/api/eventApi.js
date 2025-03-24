@@ -1,16 +1,20 @@
+import { getImageURL } from "../firebase/storage";
 import { addValuesToDB, getValuesFromDB } from "./api";
 
 class EventApi {
   static async getAllEvents() {
-    return await getValuesFromDB("events");
+    const events = await getValuesFromDB("events");
+
+    return events;
   }
 
   static async getEventById(id) {
-    return await getValuesFromDB(`events/${id}`);
+    const event = await getValuesFromDB(`events/${id}`);
+    return event;
   }
 
   static async getEventDetailById(id) {
-    const event = await getValuesFromDB(`event/${id}`);
+    const event = await getValuesFromDB(`events/${id}`);
     return event;
   }
 
@@ -24,6 +28,7 @@ class EventApi {
       NgayDang: new Date().toISOString().slice(0, -1),
       SoLuongToiDa: parseInt(data.SoLuongToiDa, 10),
       MaDiaDiem: parseInt(data.MaDiaDiem, 10),
+      HinhAnh: data.HinhAnh,
     };
 
     return await addValuesToDB("events", JSON.stringify(eventData));

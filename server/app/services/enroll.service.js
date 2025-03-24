@@ -36,6 +36,17 @@ class EnrollService {
       throw err;
     }
   }
+
+  static async deleteEnroll(id) {
+    try {
+      const query = `DELETE FROM my_database.PHIEU_DANG_KY WHERE MaSo = ${id};`;
+      const [rows] = await pool.execute(query);
+      return rows;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
 }
 
 module.exports = EnrollService;

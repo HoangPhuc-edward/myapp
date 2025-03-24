@@ -10,6 +10,6 @@ const config = {
     port: process.env.MYSQL_PORT || 3306,
   },
 };
-
+//localhost: 3307
 //mysql: 3306
 module.exports = config;
