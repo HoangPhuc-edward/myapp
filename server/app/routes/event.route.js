@@ -6,7 +6,10 @@ const router = express.Router();
 router
   .route("/")
   .get(EventController.getAllEvents)
-  .post(EventController.createEvent);
-router.get("/:id", EventController.getEventsById);
+  .post(EventController.createEvent)
+  .put(EventController.updateEvent);
 
+router.get("/:id", EventController.getEventsById);
+router.get("/search/:attribute/:value", EventController.getEventsByAttribute);
+router.get("/hide/:id", EventController.hideEvent);
 module.exports = router;

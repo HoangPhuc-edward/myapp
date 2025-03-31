@@ -12,7 +12,7 @@ const EventCard = ({ event, moveToEventDetail, index }) => {
   };
   return (
     <div
-      onClick={() => moveToEventDetail(index)}
+      onClick={() => moveToEventDetail(event)}
       className="card mb-3"
       style={{ borderRadius: "1rem" }}
     >

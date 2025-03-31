@@ -11,6 +11,7 @@ const orgRoutes = require("./app/routes/org.route");
 const addressRoutes = require("./app/routes/address.route");
 const eventRoutes = require("./app/routes/event.route");
 const enrollRoutes = require("./app/routes/enroll.route");
+const messageRoutes = require("./app/routes/message.route");
 
 app.use(cors());
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use("/orgs", orgRoutes);
 app.use("/addresses", addressRoutes);
 app.use("/events", eventRoutes);
 app.use("/enrolls", enrollRoutes);
+app.use("/messages", messageRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

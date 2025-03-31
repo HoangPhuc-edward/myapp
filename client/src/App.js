@@ -14,12 +14,13 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import Intro from "./pages/Intro";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Intro />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/org-info" element={<OrgInfo />} />

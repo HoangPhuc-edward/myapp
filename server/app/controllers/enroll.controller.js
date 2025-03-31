@@ -30,6 +30,20 @@ class EnrollController {
     }
   }
 
+  static async getEnrollByAttribute(req, res) {
+    try {
+      const attribute = req.params.attribute;
+      const value = req.params.value;
+      const enrolls = await EnrollService.getEnrollsByAttribute(
+        attribute,
+        value
+      );
+      res.status(200).json(enrolls);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   static async createEnroll(req, res) {
     try {
       const { NgayDangKy, MaSuKien, MaTNV } = req.body;

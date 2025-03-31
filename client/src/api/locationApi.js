@@ -10,6 +10,14 @@ class LocationApi {
 
     return { province: province[0], district: district[0], ward: ward[0] };
   }
+
+  static async getLocationIdsByWardId(id) {
+    const ward = await getValuesFromDB(`wards/${id}`);
+    const districtId = ward[0].MaQuanHuyen;
+    const provinceId = await getValuesFromDB(`districts/${districtId}`);
+
+    return { provinceId: provinceId[0].MaTinhThanh, districtId };
+  }
 }
 
 export default LocationApi;

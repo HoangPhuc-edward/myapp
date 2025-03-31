@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import color from "../assets/color";
 import font from "../assets/font";
@@ -8,18 +8,139 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import EventCard from "./EventCard";
+import { formatAddress, formatDateTime, formatProvince } from "../utils/format";
+import EventApi from "../api/eventApi";
+import OrgApi from "../api/orgApi";
+import AddressApi from "../api/addressApi";
+import LocationApi from "../api/locationApi";
+import EnrollApi from "../api/enrollApi";
 
-const EventHomePage = ({ events, handleEventClick, fetchData }) => {
+const EventHomePage = ({ events1, handleEventClick, fetchData1 }) => {
+  const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [ongoingEvents, setOngoingEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState([]);
+
+  const [type, setType] = useState("all");
+
+  const [searchEvent, setSearchEvent] = useState("");
+  const [searchOrg, setSearchOrg] = useState("");
+
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
 
-  const totalPages = Math.ceil(events.length / itemsPerPage);
+  const itemsPerPage = 4;
+  const totalPages = Math.ceil(selectedEvents.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentEvents = events.slice(startIndex, startIndex + itemsPerPage);
+  const currentEvents = selectedEvents.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const fetchData = async () => {
+    const events = await EventApi.getAllEvents();
+    const updatedEvents = await Promise.all(
+      events.map(async (event) => {
+        const tochuc = await OrgApi.getOrgById(event.MaToChuc);
+        const address = await AddressApi.getAddressById(event.MaDiaDiem);
+        const location = await LocationApi.getLocationByWardId(
+          address.MaPhuongXa
+        );
+        const updatedNgayBatDau = formatDateTime(event.NgayBatDau);
+        const updatedNgayKetThuc = formatDateTime(event.NgayKetThuc);
+        const soLuong = await EnrollApi.countEnrolls(event.MaSuKien);
+
+        return {
+          ...event,
+          ToChuc: tochuc.Ten,
+          HinhToChuc: tochuc.HinhAnh,
+          ThanhPho: formatProvince(location),
+          DiaDiem: formatAddress(location),
+          NgayBatDau: updatedNgayBatDau,
+          NgayKetThuc: updatedNgayKetThuc,
+          SoLuong: soLuong,
+        };
+      })
+    );
+
+    setEvents(updatedEvents);
+    setFilteredEvents(updatedEvents);
+    setSelectedEvents(updatedEvents);
+  };
 
   const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) {
+      return;
+    }
     setCurrentPage(page);
   };
+
+  const filterEvent = (searchEvent, searchOrg) => {
+    setCurrentPage(1);
+    const filteredEventName = events.filter((event) =>
+      event.TenSuKien.toLowerCase().includes(searchEvent)
+    );
+    const filteredOrg = filteredEventName.filter((event) =>
+      event.ToChuc.toLowerCase().includes(searchOrg)
+    );
+    setFilteredEvents(filteredOrg);
+  };
+
+  const splitEventByDate = (events) => {
+    const today = new Date();
+
+    const upcoming = [];
+    const ongoing = [];
+    const past = [];
+
+    events.forEach((event) => {
+      const startDate = new Date(
+        event.NgayBatDau.split("-").reverse().join("-")
+      );
+      const endDate = new Date(
+        event.NgayKetThuc.split("-").reverse().join("-")
+      );
+
+      if (startDate > today) {
+        upcoming.push(event);
+      } else if (startDate <= today && today <= endDate) {
+        ongoing.push(event);
+      } else {
+        past.push(event);
+      }
+    });
+
+    setUpcomingEvents(upcoming);
+    setOngoingEvents(ongoing);
+    setPastEvents(past);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    filterEvent(searchEvent, searchOrg);
+  }, [searchEvent, searchOrg]);
+
+  useEffect(() => {
+    splitEventByDate(filteredEvents);
+    setSelectedEvents(filteredEvents);
+    setType("all");
+  }, [filteredEvents]);
+
+  useEffect(() => {
+    if (type === "all") {
+      setSelectedEvents(filteredEvents);
+    } else if (type === "upcoming") {
+      setSelectedEvents(upcomingEvents);
+    } else if (type === "ongoing") {
+      setSelectedEvents(ongoingEvents);
+    } else if (type === "past") {
+      setSelectedEvents(pastEvents);
+    }
+  }, [type]);
 
   return (
     <div>
@@ -29,33 +150,135 @@ const EventHomePage = ({ events, handleEventClick, fetchData }) => {
       >
         TỔNG HỢP SỰ KIỆN
       </h1>
-      <div className="mb-3 input-group">
-        <span
-          className="input-group-text"
-          style={{
-            backgroundColor: color.lightPrimary,
-            border: "none",
-            borderTopLeftRadius: "1rem",
-            borderBottomLeftRadius: "1rem",
-            padding: "0.5rem 1rem",
-          }}
-        >
-          <FontAwesomeIcon icon={faSearch} />
-        </span>
-        <input
-          type="text"
-          className="form-control"
-          style={{
-            borderTopRightRadius: "1rem",
-            borderBottomRightRadius: "1rem",
-            padding: "0.5rem 1rem",
-          }}
-          placeholder="Tìm kiếm sự kiện..."
-          onChange={(e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            fetchData(searchTerm);
-          }}
-        />
+      <div className="row">
+        <div className="col-md-6">
+          <div className="input-group mb-3">
+            <span
+              className="input-group-text"
+              style={{
+                backgroundColor: color.lightPrimary,
+                border: "none",
+                borderTopLeftRadius: "1rem",
+                borderBottomLeftRadius: "1rem",
+                padding: "0.5rem 1rem",
+              }}
+            >
+              <FontAwesomeIcon icon={faSearch} />
+            </span>
+            <input
+              type="text"
+              className="form-control"
+              style={{
+                borderTopRightRadius: "1rem",
+                borderBottomRightRadius: "1rem",
+                padding: "0.5rem 1rem",
+              }}
+              placeholder="Tìm kiếm sự kiện theo tên..."
+              onChange={(e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                setSearchEvent(searchTerm);
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="col-md-6">
+          <div className="input-group mb-3">
+            <span
+              className="input-group-text"
+              style={{
+                backgroundColor: color.lightPrimary,
+                border: "none",
+                borderTopLeftRadius: "1rem",
+                borderBottomLeftRadius: "1rem",
+                padding: "0.5rem 1rem",
+              }}
+            >
+              <FontAwesomeIcon icon={faSearch} />
+            </span>
+            <input
+              type="text"
+              className="form-control"
+              style={{
+                borderTopRightRadius: "1rem",
+                borderBottomRightRadius: "1rem",
+                padding: "0.5rem 1rem",
+              }}
+              placeholder="Tìm kiếm sự kiện theo tổ chức..."
+              onChange={(e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                setSearchOrg(searchTerm);
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="row mb-3">
+        <div className="col-md-2">
+          <button
+            onClick={() => setType("all")}
+            style={{
+              backgroundColor:
+                type === "all" ? color.primary : color.veryLighGray,
+              color: type === "all" ? "white" : "black",
+              border: "none",
+              borderRadius: "1rem",
+              padding: "0.5rem 1rem",
+              width: "100%",
+            }}
+          >
+            Tất cả
+          </button>
+        </div>
+        <div className="col-md-2">
+          <button
+            onClick={() => setType("upcoming")}
+            style={{
+              backgroundColor:
+                type === "upcoming" ? color.primary : color.veryLighGray,
+              color: type === "upcoming" ? "white" : "black",
+              border: "none",
+              borderRadius: "1rem",
+              padding: "0.5rem 1rem",
+              width: "100%",
+            }}
+          >
+            Sắp diễn ra
+          </button>
+        </div>
+        <div className="col-md-2">
+          <button
+            onClick={() => setType("ongoing")}
+            style={{
+              backgroundColor:
+                type === "ongoing" ? color.primary : color.veryLighGray,
+              color: type === "ongoing" ? "white" : "black",
+              border: "none",
+              borderRadius: "1rem",
+              padding: "0.5rem 1rem",
+              width: "100%",
+            }}
+          >
+            Đang diễn ra
+          </button>
+        </div>
+        <div className="col-md-2">
+          <button
+            onClick={() => setType("past")}
+            style={{
+              backgroundColor:
+                type === "past" ? color.primary : color.veryLighGray,
+              color: type === "past" ? "white" : "black",
+              border: "none",
+              borderRadius: "1rem",
+              padding: "0.5rem 1rem",
+              width: "100%",
+            }}
+          >
+            Đã qua
+          </button>
+        </div>
       </div>
       <div className="row">
         {currentEvents.map((event, index) => (

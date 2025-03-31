@@ -20,6 +20,11 @@ class EnrollApi {
     return enrolls.length;
   }
 
+  static async getEnrollsByMSK(MaSuKien) {
+    const enrolls = await getValuesFromDB(`enrolls/msk/${MaSuKien}`);
+    return enrolls;
+  }
+
   static async deleteEnroll(id) {
     return await deleteValuesFromDB(`enrolls/${id}`);
   }
@@ -28,6 +33,11 @@ class EnrollApi {
     const enrolls = await getValuesFromDB(`enrolls/msk/${MaSuKien}`);
     console.log(enrolls);
     return enrolls.find((enroll) => enroll.MaTNV === MaTNV);
+  }
+
+  static async getEnrollByVolunteerId(id) {
+    const enrolls = await getValuesFromDB(`enrolls/search/MaTNV/${id}`);
+    return enrolls;
   }
 }
 

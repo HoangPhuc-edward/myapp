@@ -23,6 +23,20 @@ class VolunteerController {
     }
   }
 
+  static async getVolunteersByAttribute(req, res) {
+    try {
+      const attribute = req.params.attribute;
+      const value = req.params.value;
+      const volunteers = await VolunteerService.getVolunteersByAttribute(
+        attribute,
+        value
+      );
+      return res.status(200).json(volunteers);
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
   static async createVolunteer(req, res) {
     try {
       const { HoTen, NgaySinh, SDT, GioiTinh, MaDiaChi, Email, HinhAnh } =

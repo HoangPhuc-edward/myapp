@@ -17,11 +17,8 @@ import "../../assets/css/Text.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
-  faGear,
   faHome,
-  faIdCard,
-  faLock,
-  faMailBulk,
+  faMessage,
   faSignOut,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +31,8 @@ import { getUser, logout } from "../../firebase/auth";
 import EventHomePage from "../../components/EventHomePage";
 import AppFooter from "../../components/AppFooter";
 import VolAboutPage from "../../components/VolAboutPage";
+import EventListPage from "../../components/EventListPage";
+import ChatPage from "../../components/MiniPage/ChatPage";
 
 const SideBarElement = ({ content, icon, name, showName, handleClick }) => {
   return (
@@ -83,15 +82,21 @@ const VolHome = () => {
       name: "Sự kiện đã tham gia",
     },
     {
-      icon: faGear,
-      content: "Analytics",
-      name: "Thống kê",
+      icon: faMessage,
+      content: "Chats",
+      name: "Tin nhắn",
     },
   ];
 
   const enrollEvent = async (event) => {
+    const endDate = new Date(event.NgayKetThuc.split("-").reverse().join("-"));
+    if (new Date() > endDate) {
+      alert("Sự kiện đã kết thúc");
+      return;
+    }
+
     const data = {
-      NgayDangKy: "2021-12-12",
+      NgayDangKy: new Date().toISOString().split("T")[0],
       MaSuKien: event.MaSuKien,
       MaTNV: vol.MaSo,
     };
@@ -118,11 +123,12 @@ const VolHome = () => {
   };
 
   const handleNavClick = async (section) => {
+    console.log(new Date().toISOString());
     setContent(section);
   };
 
-  const handleEventClick = (id) => {
-    setEventDetail(events[id]);
+  const handleEventClick = (event) => {
+    setEventDetail(event);
     toggle();
   };
 
@@ -303,14 +309,16 @@ const VolHome = () => {
             <div className="content">
               {content === "Home" && (
                 <EventHomePage
-                  events={events}
+                  events1={events}
                   handleEventClick={handleEventClick}
-                  fetchData={fetchData}
+                  fetchData1={fetchData}
                 />
               )}
               {content === "About" && <VolAboutPage vol={vol} />}
-              {content === "Events" && <div>Noti Content</div>}
-              {content === "Analytics" && <div>setting Content</div>}
+              {content === "Events" && (
+                <EventListPage handleEventClick={handleEventClick} type="vol" />
+              )}
+              {content === "Chats" && <ChatPage type="volunteer" />}
             </div>
           </div>
         </div>

@@ -10,5 +10,8 @@ router
   .post(VolunteerController.createVolunteer);
 
 router.route("/:id").get(VolunteerController.getVolunteerById);
+router
+  .route("/search/:attribute/:value")
+  .get(VolunteerController.getVolunteersByAttribute);
 
 module.exports = router;

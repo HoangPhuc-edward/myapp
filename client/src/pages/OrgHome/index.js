@@ -20,6 +20,7 @@ import {
   faCity,
   faGear,
   faHome,
+  faMessage,
   faPlus,
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
@@ -32,6 +33,10 @@ import EventHomePage from "../../components/EventHomePage";
 import AppFooter from "../../components/AppFooter";
 import OrgAboutPage from "../../components/OrgAboutPage";
 import AddEventFormPage from "../../components/AddEventFormPage";
+import EventListPage from "../../components/EventListPage";
+import FixEventModal from "../../components/Modal/FixEventModal";
+import AnalyzeOrgPage from "../../components/MiniPage/AnalyzeOrgPage";
+import ChatPage from "../../components/MiniPage/ChatPage";
 
 const SideBarElement = ({ content, icon, name, showName, handleClick }) => {
   return (
@@ -57,6 +62,7 @@ const OrgHome = () => {
   const [events, setEvents] = useState([]);
 
   const { isShowing, toggle } = useModal();
+
   const [user, setUser] = useState(null);
   const [eventDetail, setEventDetail] = useState(null);
   const [address, setAddress] = useState(null);
@@ -89,14 +95,19 @@ const OrgHome = () => {
       content: "Analytics",
       name: "Thống kê",
     },
+    {
+      icon: faMessage,
+      content: "Chats",
+      name: "Nhắn tin",
+    },
   ];
 
   const handleNavClick = async (section) => {
     setContent(section);
   };
 
-  const handleEventClick = (id) => {
-    setEventDetail(events[id]);
+  const handleEventClick = (event) => {
+    setEventDetail(event);
     toggle();
   };
 
@@ -187,6 +198,7 @@ const OrgHome = () => {
     <div style={{ position: "relative", minHeight: "150vh" }}>
       <div className="container mt-5">
         <EventModal isShowing={isShowing} hide={toggle} event={eventDetail} />
+
         <div className="row">
           <div className="col-md-3">
             <div className="list-group">
@@ -210,6 +222,16 @@ const OrgHome = () => {
                   }}
                 >
                   Kết nối yêu thương
+                </h5>
+                <h5
+                  className="text-center"
+                  style={{
+                    fontWeight: "bold",
+                    font: font.roboto,
+                    color: "black",
+                  }}
+                >
+                  Dành cho tổ chức
                 </h5>
               </div>
 
@@ -273,16 +295,18 @@ const OrgHome = () => {
           <div className="col-md-9">
             <div className="content">
               {content === "Home" && (
-                <EventHomePage
-                  events={events}
-                  handleEventClick={handleEventClick}
-                  fetchData={fetchData}
-                />
+                <EventHomePage handleEventClick={handleEventClick} />
               )}
               {content === "About" && <OrgAboutPage org={org} />}
-              {content === "Events" && <div>Noti Content</div>}
-              {content === "Analytics" && <div>setting Content</div>}
+              {content === "Events" && (
+                <EventListPage
+                  handleEventClick={handleEventClick}
+                  type={"org"}
+                />
+              )}
+              {content === "Analytics" && <AnalyzeOrgPage />}
               {content === "AddEvent" && <AddEventFormPage org={org} />}
+              {content === "Chats" && <ChatPage type={"org"} />}
             </div>
           </div>
         </div>

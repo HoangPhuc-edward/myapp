@@ -1,31 +1,26 @@
-
-// Function to check if an email is valid
 function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
-// Function to check if a string is shorter than a given length
 function isShorterThan(str, n) {
-    return str.length < n;
+  return str.length < n;
 }
 
-// Function to calculate age from birth date
 function getAgeFromBirthDate(birthDateString) {
-    const birthDate = new Date(birthDateString);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
+  const birthDate = new Date(birthDateString);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
 
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
 
-    return age;
+  return age;
 }
 
-export {
-    isValidEmail,
-    isShorterThan,
-    getAgeFromBirthDate
-};
+export { isValidEmail, isShorterThan, getAgeFromBirthDate };

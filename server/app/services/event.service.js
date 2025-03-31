@@ -35,8 +35,42 @@ class EventService {
   ) {
     try {
       const query =
-        `INSERT INTO my_database.SU_KIEN (MaToChuc, TenSuKien, MieuTa, NgayDang, NgayBatDau, NgayKetThuc, SoLuongToiDa, MaDiaDiem, HinhAnh)` +
-        ` VALUES (${MaToChuc}, '${TenSuKien}', '${MieuTa}', '${NgayDang}', '${NgayBatDau}', '${NgayKetThuc}', ${SoLuongToiDa}, ${MaDiaDiem}, '${HinhAnh}');`;
+        `INSERT INTO my_database.SU_KIEN (MaToChuc, TenSuKien, MieuTa, NgayDang, NgayBatDau, NgayKetThuc, SoLuongToiDa, MaDiaDiem, HinhAnh, TrangThai)` +
+        ` VALUES (${MaToChuc}, '${TenSuKien}', '${MieuTa}', '${NgayDang}', '${NgayBatDau}', '${NgayKetThuc}', ${SoLuongToiDa}, ${MaDiaDiem}, '${HinhAnh}', 1);`;
+      const [rows] = await pool.execute(query);
+      return rows;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  static async updateEvent(
+    MaSuKien,
+    MaToChuc,
+    TenSuKien,
+    MieuTa,
+    NgayDang,
+    NgayBatDau,
+    NgayKetThuc,
+    SoLuongToiDa,
+    MaDiaDiem,
+    HinhAnh,
+    TrangThai
+  ) {
+    try {
+      const query = `UPDATE my_database.SU_KIEN SET MaToChuc = ${MaToChuc}, TenSuKien = '${TenSuKien}', MieuTa = '${MieuTa}', NgayDang = '${NgayDang}', NgayBatDau = '${NgayBatDau}', NgayKetThuc = '${NgayKetThuc}', SoLuongToiDa = ${SoLuongToiDa}, MaDiaDiem = ${MaDiaDiem}, HinhAnh = '${HinhAnh}', TrangThai=${TrangThai} WHERE MaSuKien = ${MaSuKien};`;
+      const [rows] = await pool.execute(query);
+      return rows;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  static async hideEvent(MaSuKien) {
+    try {
+      const query = `UPDATE my_database.SU_KIEN SET TrangThai = 0 WHERE MaSuKien = ${MaSuKien};`;
       const [rows] = await pool.execute(query);
       return rows;
     } catch (err) {

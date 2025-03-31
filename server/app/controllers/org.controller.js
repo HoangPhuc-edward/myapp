@@ -20,6 +20,17 @@ class OrgController {
     }
   }
 
+  static async getOrgsByAttribute(req, res) {
+    try {
+      const attribute = req.params.attribute;
+      const value = req.params.value;
+      const orgs = await OrgService.getOrgsByAttribute(attribute, value);
+      res.status(200).json(orgs);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   static async createOrg(req, res) {
     try {
       const { Ten, MieuTa, SDT, MaDiaChi, Email, HinhAnh } = req.body;

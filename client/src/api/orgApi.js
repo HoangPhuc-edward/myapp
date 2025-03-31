@@ -24,18 +24,21 @@ class OrgApi {
   static async getOrgIdByEmail(email) {
     return await getValuesFromDB("orgs")
       .then((org) => {
-        console.log(org);
         const orgFind = org.find((org) => {
-          console.log(org.Email, email);
           return org.Email === email;
         });
-        console.log(orgFind);
+
         return orgFind ? orgFind.MaSo : null;
       })
       .catch((error) => {
         console.error("Error:", error);
         return null;
       });
+  }
+
+  static async getOrgByEmail(email) {
+    const org = await getValuesFromDB(`orgs/search/Email/'${email}'`);
+    return org[0];
   }
 }
 

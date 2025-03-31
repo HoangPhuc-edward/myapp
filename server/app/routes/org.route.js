@@ -7,4 +7,6 @@ router.route("/").get(OrgController.getAllOrgs).post(OrgController.createOrg);
 
 router.route("/:id").get(OrgController.getOrgsById);
 
+router.route("/search/:attribute/:value").get(OrgController.getOrgsByAttribute);
+
 module.exports = router;

@@ -11,6 +11,12 @@ import { formatDateTime } from "../utils/format";
 const VolAboutPage = ({ vol }) => {
   return (
     <div className="container">
+      <h1
+        className="title my-3"
+        style={{ fontWeight: "bold", fontFamily: font.monsterrat }}
+      >
+        THÔNG TIN TÌNH NGUYỆN VIÊN
+      </h1>
       <div className="row">
         <div className="col-md-12 d-flex flex-column align-items-center justify-content-center">
           <div

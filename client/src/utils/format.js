@@ -37,6 +37,19 @@ const formatDateTime = (datetime) => {
   return `${result1[2]}-${result1[1]}-${result1[0]}`;
 };
 
+const formatDate = (datetime) => {
+  const result = datetime.split("T")[0];
+  const result1 = result.split("-");
+  return `${result1[2]}-${result1[1]}-${result1[0]}T00:00`;
+};
+
+const getCurrentDateTime = () => {
+  const now = new Date();
+  const isoString = now.toISOString();
+
+  return isoString.slice(0, 10) + " " + isoString.slice(11, 19);
+};
+
 export {
   jsonToNameValueTuple,
   formatAddress,
@@ -45,4 +58,6 @@ export {
   formatWard,
   formatDateTime,
   formatFullAddress,
+  formatDate,
+  getCurrentDateTime,
 };

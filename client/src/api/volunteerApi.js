@@ -22,6 +22,11 @@ class VolunteerApi {
     return myVol;
   }
 
+  static async getVolByEmail(email) {
+    const vol = await getValuesFromDB(`volunteers/search/Email/'${email}'`);
+    return vol[0];
+  }
+
   static async getVolIdByEmail(email) {
     return getValuesFromDB("volunteers")
       .then((vol) => {
