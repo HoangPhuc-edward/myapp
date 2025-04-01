@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import color from "../assets/color";
-import font from "../assets/font";
+import color from "../../assets/color";
+import font from "../../assets/font";
 import {
   faArrowLeft,
   faArrowRight,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import EventCard from "./EventCard";
-import { formatAddress, formatDateTime, formatProvince } from "../utils/format";
-import EventApi from "../api/eventApi";
-import OrgApi from "../api/orgApi";
-import AddressApi from "../api/addressApi";
-import LocationApi from "../api/locationApi";
-import EnrollApi from "../api/enrollApi";
+import EventCard from "../EventCard";
+import {
+  formatAddress,
+  formatDateTime,
+  formatProvince,
+} from "../../utils/format";
+import EventApi from "../../api/eventApi";
+import OrgApi from "../../api/orgApi";
+import AddressApi from "../../api/addressApi";
+import LocationApi from "../../api/locationApi";
+import EnrollApi from "../../api/enrollApi";
 
-const EventHomePage = ({ events1, handleEventClick, fetchData1 }) => {
+const EventHomePage = ({ handleEventClick }) => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);

@@ -4,7 +4,19 @@ import EnrollApi from "./enrollApi";
 
 class MessageApi {
   static async getMessageByMaTNV(id) {
-    return await getValuesFromDB(`messages/search/MaTNV/${id}`);
+    const messages = await getValuesFromDB(`messages/search/MaTNV/${id}`);
+    const privateMessage = [];
+    const groupMessage = [];
+
+    for (let i = 0; i < messages.length; i++) {
+      if (messages[i].MaSK !== 0) {
+        groupMessage.push(messages[i]);
+      } else {
+        privateMessage.push(messages[i]);
+      }
+    }
+
+    return { private: privateMessage, group: groupMessage };
   }
 
   static async addVolMessage(data) {
@@ -21,8 +33,39 @@ class MessageApi {
     );
   }
 
+  static async addVolGroupMessage(data) {
+    const messageData = {
+      NgayGio: getCurrentDateTime(),
+      MaTNV: parseInt(data.MaTNV, 10),
+      NoiDung: data.NoiDung,
+      MaSK: parseInt(data.MaSK, 10),
+    };
+
+    return await addValuesToDB(
+      "messages/group/volunteer",
+      JSON.stringify(messageData)
+    );
+  }
+
   static async getMessageByMaTC(id) {
-    return await getValuesFromDB(`messages/search/MaToChuc/${id}`);
+    const messages = await getValuesFromDB(`messages/search/MaToChuc/${id}`);
+    const privateMessage = [];
+    const groupMessage = [];
+
+    for (let i = 0; i < messages.length; i++) {
+      if (messages[i].MaSK !== 0) {
+        groupMessage.push(messages[i]);
+      } else {
+        privateMessage.push(messages[i]);
+      }
+    }
+
+    return { private: privateMessage, group: groupMessage };
+  }
+
+  static async getMessageByMaSK(id) {
+    const messages = await getValuesFromDB(`messages/search/MaSK/${id}`);
+    return messages;
   }
 
   static async addOrgMessage(data) {
@@ -34,6 +77,20 @@ class MessageApi {
     };
 
     return await addValuesToDB("messages/org", JSON.stringify(messageData));
+  }
+
+  static async addOrgGroupMessage(data) {
+    const messageData = {
+      NgayGio: getCurrentDateTime(),
+      MaToChuc: parseInt(data.MaToChuc, 10),
+      NoiDung: data.NoiDung,
+      MaSK: parseInt(data.MaSK, 10),
+    };
+
+    return await addValuesToDB(
+      "messages/group/org",
+      JSON.stringify(messageData)
+    );
   }
 
   static async sendCancelMessage(event) {

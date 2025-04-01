@@ -1,9 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import AddressForm from "./AddressForm";
-import font from "../assets/font";
-import color from "../assets/color";
-const VolunteerForm = ({
+import AddressForm from "../Form/AddressForm";
+import font from "../../assets/font";
+import color from "../../assets/color";
+
+const OrgForm = ({
   formData,
   handleChange,
   handleSubmit,
@@ -14,6 +15,7 @@ const VolunteerForm = ({
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div
+            className="card"
             style={{
               backgroundColor: "transparent",
               color: "white",
@@ -24,49 +26,36 @@ const VolunteerForm = ({
               className="text-center text-uppercase"
               style={{ fontFamily: font.monsterrat, fontWeight: "bold" }}
             >
-              Thông tin cá nhân
+              Thông tin tổ chức
             </h1>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label className="form-label" style={{ fontWeight: "bold" }}>
-                    Họ và tên:
+                    Tên tổ chức
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    name="HoTen"
-                    value={formData.HoTen}
+                    name="Ten"
+                    value={formData.Ten}
                     onChange={handleChange}
                     required
+                    style={{ backgroundColor: "white" }}
                   />
                 </div>
                 <div className="mb-3">
                   <label className="form-label" style={{ fontWeight: "bold" }}>
-                    Giới tính:
-                  </label>
-                  <select
-                    className="form-select"
-                    name="GioiTinh"
-                    value={formData.GioiTinh}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="Nam">Nam</option>
-                    <option value="Nữ">Nữ</option>
-                  </select>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" style={{ fontWeight: "bold" }}>
-                    Ngày sinh:
+                    Miêu tả tổ chức
                   </label>
                   <input
-                    type="date"
+                    type="text"
                     className="form-control"
-                    name="NgaySinh"
-                    value={formData.NgaySinh}
+                    name="MieuTa"
+                    value={formData.MieuTa}
                     onChange={handleChange}
                     required
+                    style={{ backgroundColor: "white" }}
                   />
                 </div>
                 <div className="mb-3">
@@ -80,6 +69,7 @@ const VolunteerForm = ({
                     value={formData.SDT}
                     onChange={handleChange}
                     required
+                    style={{ backgroundColor: "white" }}
                   />
                 </div>
                 <div className="mb-3">
@@ -115,4 +105,4 @@ const VolunteerForm = ({
   );
 };
 
-export default VolunteerForm;
+export default OrgForm;

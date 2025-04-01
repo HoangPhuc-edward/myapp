@@ -36,7 +36,8 @@ class MessageController {
         MaToChuc,
         MaTNV,
         NoiDung,
-        NguoiGui
+        NguoiGui,
+        0
       );
       res.status(201).json(message);
     } catch (error) {
@@ -56,7 +57,8 @@ class MessageController {
         MaToChuc,
         MaTNV,
         NoiDung,
-        "TNV"
+        "TNV",
+        0
       );
       res.status(201).json(message);
     } catch (error) {
@@ -76,7 +78,71 @@ class MessageController {
         MaToChuc,
         MaTNV,
         NoiDung,
-        "ToChuc"
+        "ToChuc",
+        0
+      );
+      res.status(201).json(message);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async createGroupMessage(req, res) {
+    try {
+      const { NgayGio, MaToChuc, MaTNV, NoiDung, MaSK } = req.body;
+      if (!NgayGio || !MaToChuc || !MaTNV || !NoiDung || !MaSK) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+      const message = await MessageService.insertMessage(
+        NgayGio,
+        MaToChuc,
+        MaTNV,
+        NoiDung,
+        "TNV",
+        MaSK
+      );
+      res.status(201).json(message);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async createVolGroupMessage(req, res) {
+    try {
+      const { NgayGio, MaTNV, NoiDung, MaSK } = req.body;
+      if (!NgayGio || !MaTNV || !NoiDung || !MaSK) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+      const message = await MessageService.insertMessage(
+        NgayGio,
+        0,
+        MaTNV,
+        NoiDung,
+        "TNV",
+        MaSK
+      );
+      res.status(201).json(message);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async createOrgGroupMessage(req, res) {
+    try {
+      const { NgayGio, MaToChuc, NoiDung, MaSK } = req.body;
+      if (!NgayGio || !MaToChuc || !MaSK || !NoiDung) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+      const message = await MessageService.insertMessage(
+        NgayGio,
+        MaToChuc,
+        0,
+        NoiDung,
+        "ToChuc",
+        MaSK
       );
       res.status(201).json(message);
     } catch (error) {

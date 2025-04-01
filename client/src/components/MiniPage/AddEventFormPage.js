@@ -1,6 +1,6 @@
-import cityImg from "../assets/img/cityOrg.jpg";
-import font from "../assets/font";
-import EventForm from "./Form/EventForm";
+import cityImg from "../../assets/img/cityOrg.jpg";
+import font from "../../assets/font";
+import EventForm from "../Form/EventForm";
 
 const AddEventFormPage = () => {
   return (

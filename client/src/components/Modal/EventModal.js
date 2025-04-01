@@ -2,19 +2,22 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import "../assets/css/EventModal.css";
+import "../../assets/css/EventModal.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendar,
   faLocation,
   faNewspaper,
+  faUser,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "react-circular-progressbar/dist/styles.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import color from "../assets/color";
-import EnrollApi from "../api/enrollApi";
+import color from "../../assets/color";
+import EnrollApi from "../../api/enrollApi";
+import EventVolunteerList from "../List/EventVolunteerList";
+import MessageApi from "../../api/messageApi";
 
 const EventModal = ({
   isShowing,
@@ -192,6 +195,32 @@ const EventModal = ({
                   <span className="mt-2" style={{ fontWeight: "bold" }}>
                     {event.ToChuc}
                   </span>
+                  {user !== null && (
+                    <button
+                      style={{
+                        backgroundColor: color.primary,
+                        color: "white",
+                        border: "none",
+                        padding: "0.5rem 1rem",
+                        width: "100%",
+                        borderRadius: "1rem",
+                        cursor: "pointer",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                        margin: "1rem 0",
+                      }}
+                      onClick={async () => {
+                        await MessageApi.addVolMessage({
+                          MaTNV: user.MaSo,
+                          MaToChuc: event.MaToChuc,
+                          NoiDung: "Chào tổ chức",
+                        });
+                        alert("Gửi tin nhắn thành công");
+                      }}
+                    >
+                      Liên hệ
+                    </button>
+                  )}
                 </div>
 
                 <div
@@ -275,6 +304,28 @@ const EventModal = ({
 
                 <p>{event.MieuTa}</p>
               </div>
+              {user === null && (
+                <div
+                  className="col-md-12 border"
+                  style={{
+                    borderRadius: "1rem",
+                    padding: "1rem",
+                    marginTop: "1rem",
+                  }}
+                >
+                  <div className="d-flex flex-row align-items-center mb-2">
+                    <FontAwesomeIcon icon={faUser} />
+                    <h5
+                      className="mb-0"
+                      style={{ fontWeight: "bold", marginLeft: "1rem" }}
+                    >
+                      Danh sách tình nguyện viên
+                    </h5>
+                  </div>
+
+                  <EventVolunteerList event={event} />
+                </div>
+              )}
             </div>
           </div>
         </React.Fragment>,

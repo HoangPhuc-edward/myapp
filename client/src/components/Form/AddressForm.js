@@ -1,5 +1,5 @@
 import React from "react";
-import useFetch from "../hooks/useFetch";
+import useFetch from "../../hooks/useFetch";
 
 const AddressForm = ({ formData, handleChange }) => {
   const { data: provincesList } = useFetch(

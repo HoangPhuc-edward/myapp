@@ -7,7 +7,7 @@ class AddressApi {
       TenDuong: data.TenDuong,
       KhuVuc: data.KhuVuc,
       MaPhuongXa: parseInt(data.MaPhuongXa, 10),
-      GhiChu: data.GhiChu,
+      GhiChu: "Khong co",
     };
 
     return await addValuesToDB("addresses", JSON.stringify(addressData));

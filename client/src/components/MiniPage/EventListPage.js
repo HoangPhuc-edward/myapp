@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import color from "../assets/color";
-import font from "../assets/font";
+import color from "../../assets/color";
+import font from "../../assets/font";
 import {
   faArrowLeft,
   faArrowRight,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import SmallEventCard from "./SmallEventCard";
-import EventApi from "../api/eventApi";
-import OrgApi from "../api/orgApi";
-import AddressApi from "../api/addressApi";
-import LocationApi from "../api/locationApi";
-import { formatAddress, formatDateTime, formatProvince } from "../utils/format";
-import EnrollApi from "../api/enrollApi";
-import { getUser } from "../firebase/auth";
-import VolunteerApi from "../api/volunteerApi";
-import FixEventModal from "./Modal/FixEventModal";
-import useModal from "../hooks/useModal";
+import SmallEventCard from "../SmallEventCard";
+import EventApi from "../../api/eventApi";
+import OrgApi from "../../api/orgApi";
+import AddressApi from "../../api/addressApi";
+import LocationApi from "../../api/locationApi";
+import {
+  formatAddress,
+  formatDateTime,
+  formatProvince,
+} from "../../utils/format";
+import EnrollApi from "../../api/enrollApi";
+import { getUser } from "../../firebase/auth";
+import VolunteerApi from "../../api/volunteerApi";
+import FixEventModal from "../Modal/FixEventModal";
+import useModal from "../../hooks/useModal";
 
 const EventListPage = ({ handleEventClick, type }) => {
   const [events, setEvents] = useState([]);
@@ -25,7 +29,8 @@ const EventListPage = ({ handleEventClick, type }) => {
 
   const [show, setShow] = useState("all");
   const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [expiredEvents, setExpiredEvents] = useState([]);
+  const [ongoingEvents, setOngoingEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
   const [selectedEvents, setSelectedEvents] = useState([]);
 
   const itemsPerPage = 3;
@@ -96,21 +101,29 @@ const EventListPage = ({ handleEventClick, type }) => {
     const today = new Date();
 
     const upcoming = [];
-    const expired = [];
+    const ongoing = [];
+    const past = [];
 
     events.forEach((event) => {
+      const startDate = new Date(
+        event.NgayBatDau.split("-").reverse().join("-")
+      );
       const endDate = new Date(
         event.NgayKetThuc.split("-").reverse().join("-")
       );
 
-      if (today < endDate) {
+      if (startDate > today) {
         upcoming.push(event);
+      } else if (startDate <= today && today <= endDate) {
+        ongoing.push(event);
       } else {
-        expired.push(event);
+        past.push(event);
       }
     });
+
     setUpcomingEvents(upcoming);
-    setExpiredEvents(expired);
+    setOngoingEvents(ongoing);
+    setPastEvents(past);
   };
 
   const handleShowModal = (event) => {
@@ -131,10 +144,16 @@ const EventListPage = ({ handleEventClick, type }) => {
   useEffect(() => {
     if (show === "all") {
       setSelectedEvents(events);
+      setCurrentPage(1);
     } else if (show === "upcoming") {
       setSelectedEvents(upcomingEvents);
-    } else {
-      setSelectedEvents(expiredEvents);
+      setCurrentPage(1);
+    } else if (show === "ongoing") {
+      setSelectedEvents(ongoingEvents);
+      setCurrentPage(1);
+    } else if (show === "past") {
+      setSelectedEvents(pastEvents);
+      setCurrentPage(1);
     }
   }, [show]);
 
@@ -209,7 +228,7 @@ const EventListPage = ({ handleEventClick, type }) => {
               width: "100%",
             }}
           >
-            Còn hạn
+            Sắp tới
           </button>
         </div>
         <div className="col-md-2">
@@ -225,10 +244,28 @@ const EventListPage = ({ handleEventClick, type }) => {
               width: "100%",
             }}
           >
-            Quá hạn
+            Hiện tại
+          </button>
+        </div>
+
+        <div className="col-md-2">
+          <button
+            onClick={() => setShow("past")}
+            style={{
+              backgroundColor:
+                show === "past" ? color.primary : color.veryLighGray,
+              color: show === "past" ? "white" : "black",
+              border: "none",
+              borderRadius: "1rem",
+              padding: "0.5rem 1rem",
+              width: "100%",
+            }}
+          >
+            Đã qua
           </button>
         </div>
       </div>
+
       <div className="row">
         {currentEvents.map((event, index) => (
           <div className="col-md-12" key={index}>

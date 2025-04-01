@@ -22,9 +22,16 @@ class MessageService {
     }
   }
 
-  static async insertMessage(NgayGio, MaToChuc, MaTNV, NoiDung, NguoiGui) {
+  static async insertMessage(
+    NgayGio,
+    MaToChuc,
+    MaTNV,
+    NoiDung,
+    NguoiGui,
+    MaSK
+  ) {
     try {
-      const query = `INSERT INTO my_database.TIN_NHAN (NgayGio, MaToChuc, MaTNV, NoiDung, NguoiGui) VALUES ('${NgayGio}', ${MaToChuc}, ${MaTNV}, '${NoiDung}', '${NguoiGui}');`;
+      const query = `INSERT INTO my_database.TIN_NHAN (NgayGio, MaToChuc, MaTNV, NoiDung, NguoiGui, MaSK) VALUES ('${NgayGio}', ${MaToChuc}, ${MaTNV}, '${NoiDung}', '${NguoiGui}', ${MaSK});`;
       const [rows] = await pool.execute(query);
       return rows;
     } catch (error) {

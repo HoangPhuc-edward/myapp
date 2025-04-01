@@ -1,6 +1,13 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendar,
+  faChurch,
+  faPen,
+  faTrash,
+  faUser,
+  faUserAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 import color from "../assets/color";
 import EventApi from "../api/eventApi";
@@ -46,10 +53,32 @@ const SmallEventCard = ({
         </div>
         <div className="col-md-6 my-1 ps-4">
           <h5 className="text-truncate">{event.TenSuKien}</h5>
-          <p className="text-truncate">Tổ chức: {event.ToChuc}</p>
-          <p className="text-truncate">Ngày Bắt đầu: {event.NgayBatDau}</p>
-          <p className="text-truncate">Ngày kết thúc: {event.NgayKetThuc}</p>
           <p className="text-truncate">
+            <FontAwesomeIcon
+              icon={faChurch}
+              style={{ marginRight: "0.5rem" }}
+            />
+            Tổ chức: {event.ToChuc}
+          </p>
+          <p className="text-truncate">
+            <FontAwesomeIcon
+              icon={faCalendar}
+              style={{ marginRight: "0.5rem" }}
+            />
+            Ngày Bắt đầu: {event.NgayBatDau}
+          </p>
+          <p className="text-truncate">
+            <FontAwesomeIcon
+              icon={faCalendar}
+              style={{ marginRight: "0.5rem" }}
+            />
+            Ngày kết thúc: {event.NgayKetThuc}
+          </p>
+          <p className="text-truncate">
+            <FontAwesomeIcon
+              icon={faUserAlt}
+              style={{ marginRight: "0.5rem" }}
+            />
             Số lượng: {event.SoLuong}/{event.SoLuongToiDa}
           </p>
         </div>

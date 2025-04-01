@@ -4,7 +4,7 @@ import EventApi from "../../api/eventApi";
 import AddressApi from "../../api/addressApi";
 import { useNavigate } from "react-router-dom";
 import useModal from "../../hooks/useModal";
-import EventModal from "../../components/EventModal";
+import EventModal from "../../components/Modal/EventModal";
 import LocationApi from "../../api/locationApi";
 import {
   formatAddress,
@@ -29,12 +29,11 @@ import font from "../../assets/font";
 import "../../assets/css/Sidebar.css";
 import EnrollApi from "../../api/enrollApi";
 import { getUser, logout } from "../../firebase/auth";
-import EventHomePage from "../../components/EventHomePage";
+import EventHomePage from "../../components/MiniPage/EventHomePage";
 import AppFooter from "../../components/AppFooter";
-import OrgAboutPage from "../../components/OrgAboutPage";
-import AddEventFormPage from "../../components/AddEventFormPage";
-import EventListPage from "../../components/EventListPage";
-import FixEventModal from "../../components/Modal/FixEventModal";
+import OrgAboutPage from "../../components/MiniPage/OrgAboutPage";
+import AddEventFormPage from "../../components/MiniPage/AddEventFormPage";
+import EventListPage from "../../components/MiniPage/EventListPage";
 import AnalyzeOrgPage from "../../components/MiniPage/AnalyzeOrgPage";
 import ChatPage from "../../components/MiniPage/ChatPage";
 
@@ -222,16 +221,6 @@ const OrgHome = () => {
                   }}
                 >
                   Kết nối yêu thương
-                </h5>
-                <h5
-                  className="text-center"
-                  style={{
-                    fontWeight: "bold",
-                    font: font.roboto,
-                    color: "black",
-                  }}
-                >
-                  Dành cho tổ chức
                 </h5>
               </div>
 

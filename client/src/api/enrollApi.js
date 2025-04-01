@@ -1,4 +1,6 @@
 import { addValuesToDB, deleteValuesFromDB, getValuesFromDB } from "./api";
+import EventApi from "./eventApi";
+import OrgApi from "./orgApi";
 
 class EnrollApi {
   static async addEnroll(data) {
@@ -31,13 +33,23 @@ class EnrollApi {
 
   static async findEnrolled(MaSuKien, MaTNV) {
     const enrolls = await getValuesFromDB(`enrolls/msk/${MaSuKien}`);
-    console.log(enrolls);
     return enrolls.find((enroll) => enroll.MaTNV === MaTNV);
   }
 
   static async getEnrollByVolunteerId(id) {
     const enrolls = await getValuesFromDB(`enrolls/search/MaTNV/${id}`);
     return enrolls;
+  }
+
+  static async getContactByEnrolls(MaTNV) {
+    const enrolls = await getValuesFromDB(`enrolls/search/MaTNV/${MaTNV}`);
+    const contacts = [];
+    for (let i = 0; i < enrolls.length; i++) {
+      const event = await EventApi.getEventById(enrolls[i].MaSuKien);
+      const org = await OrgApi.getOrgById(event[0].MaToChuc);
+      contacts.push(org);
+    }
+    return contacts;
   }
 }
 

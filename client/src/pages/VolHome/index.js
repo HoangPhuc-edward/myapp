@@ -4,7 +4,7 @@ import EventApi from "../../api/eventApi";
 import AddressApi from "../../api/addressApi";
 import { useNavigate } from "react-router-dom";
 import useModal from "../../hooks/useModal";
-import EventModal from "../../components/EventModal";
+import EventModal from "../../components/Modal/EventModal";
 import LocationApi from "../../api/locationApi";
 import {
   formatAddress,
@@ -28,11 +28,12 @@ import "../../assets/css/Sidebar.css";
 import VolunteerApi from "../../api/volunteerApi";
 import EnrollApi from "../../api/enrollApi";
 import { getUser, logout } from "../../firebase/auth";
-import EventHomePage from "../../components/EventHomePage";
+import EventHomePage from "../../components/MiniPage/EventHomePage";
 import AppFooter from "../../components/AppFooter";
-import VolAboutPage from "../../components/VolAboutPage";
-import EventListPage from "../../components/EventListPage";
+import VolAboutPage from "../../components/MiniPage/VolAboutPage";
+import EventListPage from "../../components/MiniPage/EventListPage";
 import ChatPage from "../../components/MiniPage/ChatPage";
+import ChatEventPage from "../../components/MiniPage/ChatEventPage";
 
 const SideBarElement = ({ content, icon, name, showName, handleClick }) => {
   return (

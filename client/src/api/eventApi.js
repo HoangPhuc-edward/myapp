@@ -11,13 +11,13 @@ class EventApi {
 
   static async getEventById(id) {
     const event = await getValuesFromDB(`events/${id}`);
-    if (event.TrangThai === 0) return null;
+    if (event[0].TrangThai === 0) return null;
     return event;
   }
 
   static async getEventDetailById(id) {
     const event = await getValuesFromDB(`events/${id}`);
-    if (event.TrangThai === 0) return null;
+    if (event[0].TrangThai === 0) return null;
     return event;
   }
 

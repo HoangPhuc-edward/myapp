@@ -15,4 +15,7 @@ router
 router.route("/volunteer").post(MessageController.createVolMessage);
 router.route("/org").post(MessageController.createOrgMessage);
 
+router.route("/group/volunteer").post(MessageController.createVolGroupMessage);
+router.route("/group/org").post(MessageController.createOrgGroupMessage);
+
 module.exports = router;

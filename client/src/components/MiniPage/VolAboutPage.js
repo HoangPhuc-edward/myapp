@@ -1,26 +1,27 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import font from "../assets/font";
 import {
   faIdCard,
   faLock,
   faMailBulk,
 } from "@fortawesome/free-solid-svg-icons";
-import color from "../assets/color";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import color from "../../assets/color";
+import font from "../../assets/font";
+import { formatDateTime } from "../../utils/format";
 
-const OrgAboutPage = ({ org }) => {
+const VolAboutPage = ({ vol }) => {
   return (
     <div className="container">
       <h1
         className="title my-3"
         style={{ fontWeight: "bold", fontFamily: font.monsterrat }}
       >
-        THÔNG TIN TỔ CHỨC
+        THÔNG TIN TÌNH NGUYỆN VIÊN
       </h1>
       <div className="row">
         <div className="col-md-12 d-flex flex-column align-items-center justify-content-center">
           <div
             style={{
-              backgroundImage: `url(${org?.HinhAnh})`,
+              backgroundImage: `url(${vol?.HinhAnh})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               width: "4rem",
@@ -35,9 +36,9 @@ const OrgAboutPage = ({ org }) => {
               fontFamily: font.monsterrat,
             }}
           >
-            {org?.Ten}
+            {vol?.HoTen}
           </h4>
-          <h6>Chào mừng tổ chức</h6>
+          <h6>Chào mừng tình nguyện viên</h6>
         </div>
       </div>
       <div className="row mt-4">
@@ -56,18 +57,23 @@ const OrgAboutPage = ({ org }) => {
             />
           </div>
 
-          <h5 style={{ fontWeight: "bold" }}>Miêu tả</h5>
-          <span>{org?.MieuTa}</span>
+          <h5 style={{ fontWeight: "bold" }}>Ngày Sinh</h5>
+          <span>{formatDateTime(vol.NgaySinh)}</span>
 
           <h5 className="mt-4" style={{ fontWeight: "bold" }}>
             Số điện thoại
           </h5>
-          <span>{org?.SDT}</span>
+          <span>{vol?.SDT}</span>
+
+          <h5 className="mt-4" style={{ fontWeight: "bold" }}>
+            Giới tính
+          </h5>
+          <span>{vol?.GioiTinh}</span>
 
           <h5 className="mt-4" style={{ fontWeight: "bold" }}>
             Địa chỉ
           </h5>
-          <span>{org.DiaChi}</span>
+          <span>{vol?.DiaChi}</span>
         </div>
         <div className="col-md-4">
           <div className="border p-4" style={{ position: "relative" }}>
@@ -86,7 +92,7 @@ const OrgAboutPage = ({ org }) => {
             </div>
 
             <h5 style={{ fontWeight: "bold" }}>Email</h5>
-            <span>{org?.Email}</span>
+            <span>{vol?.Email}</span>
           </div>
 
           <div
@@ -118,4 +124,4 @@ const OrgAboutPage = ({ org }) => {
   );
 };
 
-export default OrgAboutPage;
+export default VolAboutPage;

@@ -49,7 +49,7 @@ const FixEventModal = ({ isShowing, hide, events }) => {
                 <FontAwesomeIcon icon={faX} />
               </div>
             </div>
-            <div>
+            <div className="p-4">
               <EventForm event={events} />
             </div>
           </div>

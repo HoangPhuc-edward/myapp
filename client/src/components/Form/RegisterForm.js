@@ -1,17 +1,19 @@
 import { Link } from "react-router-dom";
-import color from "../assets/color";
-
-export const LoginForm = ({
+import color from "../../assets/color";
+export const RegisterForm = ({
   email,
   setEmail,
   password,
   setPassword,
+  reEnterPassword,
+  setReEnterPassword,
   accountType,
-  handleTypeChange,
+  setAccountType,
   handleSubmit,
+  handleTypeChange,
 }) => {
   return (
-    <div className="row ms-5 mt-5">
+    <div className="row">
       <div className="col-md-12 p-5">
         <div>
           <h1
@@ -26,15 +28,12 @@ export const LoginForm = ({
             KINDLINK
           </h1>
           <h5 className="text-center" style={{ fontWeight: "bold" }}>
-            Chào mừng bạn quay trở lại với KINDLINK
+            Chào mừng bạn đến với KINDLINK
           </h5>
         </div>
-
         <form onSubmit={handleSubmit}>
-          <div className="my-4">
-            <label htmlFor="email" className="mb-1">
-              Email:
-            </label>
+          <div className=" mb-3">
+            <label className="mb-1">Email:</label>
             <input
               type="email"
               className="form-control"
@@ -43,16 +42,14 @@ export const LoginForm = ({
                 border: "1px solid #ccc",
                 padding: "0.8rem",
               }}
-              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              maxLength="50"
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="mb-1">
-              Mật khẩu:
-            </label>
+          <div className=" mb-3">
+            <label className="mb-1">Mật khẩu:</label>
             <input
               type="password"
               className="form-control"
@@ -61,13 +58,29 @@ export const LoginForm = ({
                 border: "1px solid #ccc",
                 padding: "0.8rem",
               }}
-              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              maxLength="20"
               required
             />
           </div>
-          <div className="mb-4">
+          <div className=" mb-3">
+            <label className="mb-1">Nhập lại mật khẩu:</label>
+            <input
+              type="password"
+              className="form-control"
+              style={{
+                borderRadius: "1rem",
+                border: "1px solid #ccc",
+                padding: "0.8rem",
+              }}
+              value={reEnterPassword}
+              onChange={(e) => setReEnterPassword(e.target.value)}
+              maxLength="20"
+              required
+            />
+          </div>
+          <div className=" mb-3">
             <label className="mb-1">Chọn loại tài khoản</label>
             <select
               name="type"
@@ -95,18 +108,17 @@ export const LoginForm = ({
               border: "none",
             }}
           >
-            Đăng nhập
+            Đăng ký
           </button>
         </form>
-
-        <div className="text-center mt-3">
-          <h6>
-            Chưa có tài khoản?{" "}
-            <Link to="/register" style={{ color: color.primary }}>
-              Đăng ký
-            </Link>
-          </h6>
-        </div>
+      </div>
+      <div className="card-footer text-center">
+        <h6>
+          Đã có tài khoản?{" "}
+          <Link to="/login" style={{ color: color.primary }}>
+            Đăng nhập
+          </Link>
+        </h6>
       </div>
     </div>
   );

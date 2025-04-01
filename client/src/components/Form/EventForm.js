@@ -1,5 +1,5 @@
 import { use, useEffect, useState } from "react";
-import AddressForm from "../AddressForm";
+import AddressForm from "../Form/AddressForm";
 import color from "../../assets/color";
 import EventApi from "../../api/eventApi";
 import { uploadImage } from "../../firebase/storage";

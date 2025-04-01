@@ -45,9 +45,18 @@ const formatDate = (datetime) => {
 
 const getCurrentDateTime = () => {
   const now = new Date();
-  const isoString = now.toISOString();
-
-  return isoString.slice(0, 10) + " " + isoString.slice(11, 19);
+  return now
+    .toLocaleString("en-CA", {
+      timeZone: "Asia/Ho_Chi_Minh",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    })
+    .replace(",", "");
 };
 
 export {
