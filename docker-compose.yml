@@ -35,9 +35,9 @@ services:
       - backend
     volumes:
       - ./client:/app
-      # - /app/node_modules # Prevents node_modules from being overwritten
     command: >
       sh -c "npm install && npm start"
+
 
 networks:
   mynetwork:

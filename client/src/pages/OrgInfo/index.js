@@ -7,6 +7,7 @@ import { useState } from "react";
 import AddressApi from "../../api/addressApi";
 import OrgApi from "../../api/orgApi";
 import { uploadImage } from "../../firebase/storage";
+import { isShorterThan } from "../../utils/validationUtils";
 
 const OrgInfo = () => {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const OrgInfo = () => {
     const userId = await OrgApi.addOrg(orgData);
 
     if (userId) {
-      alert(`Đăng ký tài khoản thành công: ${userId}`);
+      alert(`Đăng ký tài khoản thành công`);
       navigate(`/org-home`);
     } else alert("Lỗi đăng ký tài khoản!");
   };
@@ -72,6 +73,27 @@ const OrgInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.Ten) {
+      alert("Tên không được để trống!");
+      return;
+    }
+
+    if (!formData.SDT) {
+      alert("Số điện thoại không được để trống!");
+      return;
+    }
+
+    if (!formData.MieuTa) {
+      alert("Mô tả không được để trống!");
+      return;
+    }
+
+    if (isShorterThan(formData.SDT, 6)) {
+      alert("Số điện thoại không hợp lệ!");
+      return;
+    }
+
     const url = await uploadImage(img);
     formData.HinhAnh = url;
     addOrgToDatabase(formData);

@@ -53,10 +53,6 @@ const ChatPrivatePage = ({ type }) => {
         }
       }
       setGuestList(list);
-
-      if (!guess && list.length > 0) {
-        setGuess(list[0].MaSo);
-      }
     } else {
       const myMessages = await MessageApi.getMessageByMaTC(user.MaSo);
       setMessages(myMessages.private);
@@ -72,9 +68,6 @@ const ChatPrivatePage = ({ type }) => {
       }
 
       setGuestList(list);
-      if (!guess && list.length > 0) {
-        setGuess(list[0].MaSo);
-      }
     }
   };
 
@@ -149,7 +142,13 @@ const ChatPrivatePage = ({ type }) => {
   }, []);
 
   useEffect(() => {
-    fetchMessageAndGuess();
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      fetchMessageAndGuess();
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [user]);
 
   useEffect(() => {

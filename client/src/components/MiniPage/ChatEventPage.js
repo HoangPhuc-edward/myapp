@@ -164,7 +164,13 @@ const ChatEventPage = ({ type }) => {
   }, []);
 
   useEffect(() => {
-    fetchEventAndMessage();
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      fetchEventAndMessage();
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [user]);
 
   useEffect(() => {

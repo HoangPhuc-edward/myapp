@@ -135,6 +135,7 @@ const EventHomePage = ({ handleEventClick }) => {
   }, [filteredEvents]);
 
   useEffect(() => {
+    setCurrentPage(1);
     if (type === "all") {
       setSelectedEvents(filteredEvents);
     } else if (type === "upcoming") {

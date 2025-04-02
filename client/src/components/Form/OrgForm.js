@@ -74,7 +74,7 @@ const OrgForm = ({
                 </div>
                 <div className="mb-3">
                   <label className="form-label" style={{ fontWeight: "bold" }}>
-                    Hình ảnh sự kiện
+                    Hình ảnh
                   </label>
                   <input
                     type="file"

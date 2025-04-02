@@ -1,7 +1,6 @@
 import React from "react";
 import { RegisterForm } from "../../components/Form/RegisterForm";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useRegisterLogic } from "./script";
 import registerImg from "../../assets/img/register.png";
 import color from "../../assets/color";
 import { isValidEmail, isShorterThan } from "../../utils/validationUtils";
@@ -11,18 +10,6 @@ import { useState } from "react";
 import { getAuth } from "firebase/auth";
 
 const Register = () => {
-  // const {
-  //   email,
-  //   setEmail,
-  //   password,
-  //   setPassword,
-  //   reEnterPassword,
-  //   setReEnterPassword,
-  //   accountType,
-  //   setAccountType,
-  //   handleSubmit,
-  //   handleTypeChange,
-  // } = useRegisterLogic();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [reEnterPassword, setReEnterPassword] = useState("");

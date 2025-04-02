@@ -1,18 +1,15 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useVolunteerInfoLogic } from "./script";
 import VolunteerForm from "../../components/Form/VolunteerForm";
 import cityOrgImg from "../../assets/img/cityOrg.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AddressApi from "../../api/addressApi";
 import VolunteerApi from "../../api/volunteerApi";
-import useFetch from "../../hooks/useFetch";
 import { uploadImage } from "../../firebase/storage";
+import { isShorterThan } from "../../utils/validationUtils";
 
 const VolunteerInfo = () => {
-  // const { formData, handleChange, handleSubmit, handleImageChange } =
-  //   useVolunteerInfoLogic();
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state.user_email;
@@ -56,7 +53,7 @@ const VolunteerInfo = () => {
     const userId = await VolunteerApi.addVolunteer(userData);
 
     if (userId) {
-      alert(`Đăng ký tài khoản thành công: ${userId}`);
+      alert(`Đăng ký tài khoản thành công`);
       navigate(`/vol-home`);
     } else alert("Lỗi đăng ký tài khoản!");
   };
@@ -71,7 +68,27 @@ const VolunteerInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    if (!formData.HoTen) {
+      alert("Họ tên không được để trống!");
+      return;
+    }
+
+    if (!formData.SDT) {
+      alert("Số điện thoại không được để trống!");
+      return;
+    }
+
+    if (!formData.NgaySinh) {
+      alert("Ngày sinh không được để trống!");
+      return;
+    }
+
+    if (isShorterThan(formData.SDT, 6)) {
+      alert("Số điện thoại phải chứa ít nhất 6 ký tự!");
+      return;
+    }
+
     const url = await uploadImage(img);
     formData.HinhAnh = url;
     addUserToDatabase(formData);
