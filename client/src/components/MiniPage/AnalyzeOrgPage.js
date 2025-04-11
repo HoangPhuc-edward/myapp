@@ -22,6 +22,7 @@ const AnalyzeOrgPage = () => {
   const [totalVolunteerMonth, setTotalVolunteerMonth] = useState(0);
   const [chartData, setChartData] = useState([]);
   const [currentChartIndex, setCurrentChartIndex] = useState(0);
+  const [totalChartData, setTotalChartData] = useState([]);
 
   useEffect(() => {
     const fetchOrg = async () => {
@@ -59,6 +60,11 @@ const AnalyzeOrgPage = () => {
 
       const value = await AnalyzeOrg.getChartData(org.MaSo);
       setChartData(value);
+
+      const totalData = await AnalyzeOrg.getNumberOfVolunteerChartData(
+        org.MaSo
+      );
+      setTotalChartData(totalData);
     };
 
     fetchTotal();
@@ -75,7 +81,7 @@ const AnalyzeOrgPage = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5" style={{ minHeight: "180vh" }}>
       <h1
         className="title my-3"
         style={{ fontWeight: "bold", fontFamily: font.monsterrat }}
@@ -129,7 +135,12 @@ const AnalyzeOrgPage = () => {
         </div>
       </div>
 
-      <h4 className="text-center mt-5 mb-3">Biểu Đồ</h4>
+      <h4 className="text-center mt-5 mb-3">Biểu đồ tổng hợp</h4>
+      <div>
+        <EventLineChart eventData={totalChartData} isTotal={true} />
+      </div>
+
+      <h4 className="text-center mt-5 mb-3">Biểu đồ từng sự kiện</h4>
       {chartData.length > 0 && (
         <div className="text-center">
           <h5>{chartData[currentChartIndex].TenSuKien}</h5>

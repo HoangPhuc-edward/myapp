@@ -4,8 +4,6 @@ const AppFooter = () => {
   return (
     <footer
       style={{
-        position: "absolute",
-        bottom: 0,
         width: "100%",
       }}
       className="footer bg-light text-dark py-3 px-5 mt-5 d-flex flex-row justify-content-between align-items-center"

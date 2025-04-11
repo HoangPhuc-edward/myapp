@@ -96,6 +96,32 @@ const VolHome = () => {
       return;
     }
 
+    const enrollCount = await EnrollApi.countEnrolls(event.MaSuKien);
+    if (event.SoLuongToiDa - enrollCount < 1) {
+      alert("Sự kiện đã hết chỗ!");
+      return;
+    }
+
+    let dayLeft = Math.abs(
+      new Date() - new Date(event.NgayKetThuc.split("-").reverse().join("-"))
+    );
+
+    dayLeft = dayLeft / (1000 * 60 * 60 * 24);
+
+    if (dayLeft <= 14) {
+      const volTinhThanh = await AddressApi.getTinhThanhFromAddressId(
+        vol.MaDiaChi
+      );
+      const eventTinhThanh = await AddressApi.getTinhThanhFromAddressId(
+        event.MaDiaDiem
+      );
+      console.log();
+      if (volTinhThanh !== eventTinhThanh) {
+        alert("Bạn không thể tham gia sự kiện này vì không cùng tỉnh thành");
+        return;
+      }
+    }
+
     const data = {
       NgayDangKy: new Date().toISOString().split("T")[0],
       MaSuKien: event.MaSuKien,
@@ -172,12 +198,13 @@ const VolHome = () => {
     setAddress(address);
 
     myVol.DiaChi = address;
+    myVol.MaTinhThanh = myAddress.MaPhuongXa;
     setVol(myVol);
   };
 
   const fetchData = async (searchTerm) => {
     const events = await EventApi.getAllEvents();
-    const updatedEvents = await Promise.all(
+    let updatedEvents = await Promise.all(
       events.map(async (event) => {
         const tochuc = await OrgApi.getOrgById(event.MaToChuc);
         const address = await AddressApi.getAddressById(event.MaDiaDiem);
@@ -200,9 +227,16 @@ const VolHome = () => {
         };
       })
     );
+
     const filteredEvents = updatedEvents.filter((event) =>
       event.TenSuKien.toLowerCase().includes(searchTerm)
     );
+
+    filteredEvents.sort((a, b) => {
+      const dateA = new Date(a.NgayKetThuc.split("-").reverse().join("-"));
+      const dateB = new Date(b.NgayKetThuc.split("-").reverse().join("-"));
+      return dateB - dateA;
+    });
 
     setEvents(filteredEvents);
   };
@@ -309,11 +343,7 @@ const VolHome = () => {
           <div className="col-md-9">
             <div className="content">
               {content === "Home" && (
-                <EventHomePage
-                  events1={events}
-                  handleEventClick={handleEventClick}
-                  fetchData1={fetchData}
-                />
+                <EventHomePage handleEventClick={handleEventClick} />
               )}
               {content === "About" && <VolAboutPage vol={vol} />}
               {content === "Events" && (

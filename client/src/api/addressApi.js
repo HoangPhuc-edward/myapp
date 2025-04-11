@@ -17,6 +17,15 @@ class AddressApi {
     const address = await getValuesFromDB(`addresses/${id}`);
     return address[0];
   }
+
+  static async getTinhThanhFromAddressId(id) {
+    const address = await getValuesFromDB(`addresses/${id}`);
+    const phuongXa = await getValuesFromDB(`wards/${address[0].MaPhuongXa}`);
+    const quanHuyen = await getValuesFromDB(
+      `districts/${phuongXa[0].MaQuanHuyen}`
+    );
+    return quanHuyen[0].MaTinhThanh;
+  }
 }
 
 export default AddressApi;

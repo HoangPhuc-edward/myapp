@@ -68,6 +68,12 @@ const EventHomePage = ({ handleEventClick }) => {
       })
     );
 
+    updatedEvents.sort((a, b) => {
+      const dateA = new Date(a.NgayKetThuc.split("-").reverse().join("-"));
+      const dateB = new Date(b.NgayKetThuc.split("-").reverse().join("-"));
+      return dateB - dateA;
+    });
+
     setEvents(updatedEvents);
     setFilteredEvents(updatedEvents);
     setSelectedEvents(updatedEvents);

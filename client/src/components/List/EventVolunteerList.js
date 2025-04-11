@@ -48,47 +48,48 @@ const EventVolunteerList = ({ event }) => {
         overflowY: "auto",
       }}
     >
-      {volList.map((vol, index) => (
-        <div
-          className="row align-items-center my-3 p-3 shadow-sm rounded"
-          key={index}
-          style={{ backgroundColor: color.veryLighGray }}
-        >
-          <div
-            className="col-md-1 d-flex justify-content-center align-items-center"
-            style={{
-              width: "3rem",
-              height: "3rem",
-              borderRadius: "50%",
-              backgroundColor: "white",
-              margin: "0.5rem",
-            }}
-          >
-            <strong>{index + 1}</strong>
-          </div>
-          <div className="col-md-6">
-            <h6 className="text-truncate mb-1">{vol.HoTen}</h6>
-            <p className="text-muted mb-0">{vol.Email}</p>
-          </div>
-          <div className="col-md-4 text-end">
-            <button
-              onClick={() => sendMessageToVolunteer(vol)}
-              className="btn btn-primary btn-sm"
-              style={{
-                backgroundColor: color.primary,
-                borderRadius: "1rem",
-                padding: "0.8rem 1.2rem",
-                color: "white",
-                border: "none",
-                fontWeight: "800",
-                fontFamily: font.monsterrat,
-              }}
-            >
-              Liên hệ
-            </button>
-          </div>
-        </div>
-      ))}
+      <table className="table table-striped table-bordered align-middle">
+        <thead className="table-light">
+          <tr>
+            <th style={{ width: "4rem", textAlign: "center" }}>#</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>SĐT</th>
+            <th>Giới tính</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          {volList.map((vol, index) => (
+            <tr key={index} style={{ backgroundColor: color.veryLighGray }}>
+              <td className="text-center">
+                <strong>{index + 1}</strong>
+              </td>
+              <td>{vol.HoTen}</td>
+              <td>{vol.Email}</td>
+              <td>{vol.SDT}</td>
+              <td>{vol.GioiTinh}</td>
+              <td>
+                <button
+                  onClick={() => sendMessageToVolunteer(vol)}
+                  className="btn btn-primary btn-sm"
+                  style={{
+                    backgroundColor: color.primary,
+                    borderRadius: "1rem",
+                    padding: "0.6rem 1rem",
+                    color: "white",
+                    border: "none",
+                    fontWeight: "800",
+                    fontFamily: font.monsterrat,
+                  }}
+                >
+                  Liên hệ
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

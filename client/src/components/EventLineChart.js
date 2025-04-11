@@ -8,7 +8,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-// Dữ liệu sự kiện
 
 const EventLineChart = ({ eventData }) => {
   console.log(eventData);

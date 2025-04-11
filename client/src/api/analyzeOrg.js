@@ -61,6 +61,7 @@ class AnalyzeOrg {
       const enrollCount = enrolls.reduce((acc, enroll) => {
         const date = enroll.NgayDangKy;
         acc[date] = (acc[date] || 0) + 1;
+        console.log(acc[date]);
         return acc;
       }, {});
 
@@ -73,13 +74,35 @@ class AnalyzeOrg {
 
       let total = 0;
       enrollData.forEach((item) => {
-        total += item.count;
+        total = item.count;
         data.DuLieu.push({ date: formatDateTime(item.date), people: total });
       });
 
       chartData.push(data);
     }
     return chartData;
+  }
+
+  static async getNumberOfVolunteerChartData(orgId) {
+    const events = await EventApi.getEventByOrgId(orgId);
+
+    const enrollData = [];
+
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
+      const enrolls = await EnrollApi.getEnrollsByMSK(event.MaSuKien);
+
+      enrolls.forEach((enroll) => {
+        const date = formatDateTime(enroll.NgayDangKy);
+        const existingData = enrollData.find((data) => data.date === date);
+        if (existingData) {
+          existingData.people += 1;
+        } else {
+          enrollData.push({ date, people: 1 });
+        }
+      });
+    }
+    return enrollData.sort((a, b) => new Date(a.date) - new Date(b.date));
   }
 }
 
