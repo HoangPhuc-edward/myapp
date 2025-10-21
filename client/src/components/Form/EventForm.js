@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AddressForm from "../Form/AddressForm";
 import color from "../../assets/color";
 import EventApi from "../../api/eventApi";
@@ -8,8 +8,10 @@ import { getUser } from "../../firebase/auth";
 import OrgApi from "../../api/orgApi";
 import LocationApi from "../../api/locationApi";
 import { formatDate } from "../../utils/format";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner, faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-const EventForm = ({ event }) => {
+const EventForm = ({ event, isLoading: parentLoading }) => {
   const [formData, setFormData] = useState({
     TenSuKien: "",
     MieuTa: "",
@@ -28,9 +30,11 @@ const EventForm = ({ event }) => {
     district: "",
     city: "",
     HinhAnh: "",
+    Quy: 0,
   });
 
   const [img, setImg] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,84 +43,110 @@ const EventForm = ({ event }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (event) {
-        const address = await AddressApi.getAddressById(event.MaDiaDiem);
+        if (event.MaDiaDiem === "0") {
+          setFormData({
+            TenSuKien: event.TenSuKien,
+            MieuTa: event.MieuTa,
+            NgayBatDau: event.NgayBatDau,
+            NgayKetThuc: event.NgayKetThuc,
+            SoLuongToiDa: event.SoLuongToiDa,
+            SoNha: event.SoNha,
+            TenDuong: event.TenDuong,
+            KhuVuc: event.KhuVuc,
+            MaPhuongXa: event.MaPhuongXa,
+            MaDiaDiem: event.MaDiaDiem,
+            MaToChuc: event.MaToChuc,
+            district: event.district,
+            city: event.city,
+            HinhAnh: event.HinhAnh,
+          });
+        } else {
+          // const address = await AddressApi.getAddressById(event.MaDiaDiem);
 
-        const location = await LocationApi.getLocationIdsByWardId(
-          address.MaPhuongXa
-        );
+          const location = await LocationApi.getLocationIdsByWardId(
+            event.MaPhuongXa
+          );
 
-        event.MaPhuongXa = address.MaPhuongXa;
-        event.district = location.districtId;
-        event.city = location.provinceId;
+          event.district = location.districtId;
+          event.city = location.provinceId;
 
-        setFormData({
-          TenSuKien: event.TenSuKien,
-          MieuTa: event.MieuTa,
-          NgayBatDau: formatDate(event.NgayBatDau),
-          NgayKetThuc: formatDate(event.NgayKetThuc),
-          SoLuongToiDa: event.SoLuongToiDa,
-          SoNha: address.SoNha,
-          TenDuong: address.TenDuong,
-          KhuVuc: address.KhuVuc,
-          MaPhuongXa: address.MaPhuongXa,
-          MaDiaDiem: event.MaDiaDiem,
-          MaToChuc: event.MaToChuc,
-          district: location.districtId,
-          city: location.provinceId,
-          HinhAnh: event.HinhAnh,
-        });
+          setFormData({
+            TenSuKien: event.TenSuKien,
+            MieuTa: event.MieuTa,
+            NgayBatDau: formatDate(event.NgayBatDau),
+            NgayKetThuc: formatDate(event.NgayKetThuc),
+            SoLuongToiDa: event.SoLuongToiDa,
+            SoNha: event.SoNha,
+            TenDuong: event.TenDuong,
+            KhuVuc: event.KhuVuc,
+            MaPhuongXa: event.MaPhuongXa,
+            MaDiaDiem: event.MaDiaDiem,
+            MaToChuc: event.MaToChuc,
+            district: event.district,
+            Quy: event.Quy || 0,
+            city: event.city,
+            HinhAnh: event.HinhAnh,
+          });
+        }
       }
     };
     fetchData();
-  }, []);
+  }, [event]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (!formData.TenSuKien.trim()) {
       alert("Vui lòng nhập Tên Sự Kiện");
       document.getElementsByName("TenSuKien")[0].focus();
+      setIsSubmitting(false);
       return;
     }
 
     if (!formData.MieuTa.trim()) {
       alert("Vui lòng nhập Miêu Tả Sự Kiện");
       document.getElementsByName("MieuTa")[0].focus();
+      setIsSubmitting(false);
       return;
     }
 
     if (!formData.NgayBatDau) {
-      alert("Vui lòng chọn Ngày Bắt Đầu");
+      alert("Vui lòng chọn Ngày bắt đầu");
       document.getElementsByName("NgayBatDau")[0].focus();
+      setIsSubmitting(false);
       return;
     }
 
     if (!formData.NgayKetThuc) {
-      alert("Vui lòng chọn Ngày Kết Thúc");
+      alert("Vui lòng chọn Ngày kết thúc");
       document.getElementsByName("NgayKetThuc")[0].focus();
+      setIsSubmitting(false);
       return;
     }
 
     if (new Date(formData.NgayBatDau) >= new Date(formData.NgayKetThuc)) {
       alert("Ngày Bắt Đầu phải trước Ngày Kết Thúc");
       document.getElementsByName("NgayBatDau")[0].focus();
+      setIsSubmitting(false);
       return;
     }
 
     if (!formData.SoLuongToiDa || formData.SoLuongToiDa <= 0) {
       alert("Số Lượng Tối Đa phải lớn hơn 0");
       document.getElementsByName("SoLuongToiDa")[0].focus();
+      setIsSubmitting(false);
       return;
     }
 
-    if (!event) {
+    if (!event || event.MaDiaDiem === "0") {
       try {
         const addressId = await AddressApi.addAddress(formData);
         const url = await uploadImage(img);
 
         formData.MaDiaDiem = addressId;
 
-        formData.HinhAnh = url;
+        formData.HinhAnh = url || "event.jpg";
 
         const user = await getUser();
 
@@ -131,7 +161,7 @@ const EventForm = ({ event }) => {
           alert("Lỗi thêm sự kiện!");
         }
       } catch (error) {
-        alert("Có lỗi xảy ra! Vui lòng thử lại.");
+        alert("Có lỗi xảy ra khi thêm! Vui lòng thử lại.", error);
       }
     } else {
       try {
@@ -142,22 +172,8 @@ const EventForm = ({ event }) => {
           formData.HinhAnh = url;
         }
 
-        if (
-          formData.SoNha !== event.SoNha ||
-          formData.TenDuong !== event.TenDuong ||
-          formData.KhuVuc !== event.KhuVuc ||
-          formData.MaPhuongXa !== event.MaPhuongXa ||
-          formData.district !== event.district ||
-          formData.city !== event.city
-        ) {
-          const addressId = await AddressApi.addAddress(formData);
-          formData.MaDiaDiem = addressId;
-        }
-
         formData.TrangThai = 1;
         formData.MaSuKien = event.MaSuKien;
-
-        console.log(formData);
         const response = await EventApi.updateEvent(formData);
 
         if (response) {
@@ -167,17 +183,63 @@ const EventForm = ({ event }) => {
           alert("Lỗi sửa thông tin sự kiện!");
         }
       } catch (error) {
-        alert("Có lỗi xảy ra! Vui lòng thử lại.");
+        alert("Có lỗi xảy ra khi sửa! Vui lòng thử lại.");
       }
     }
+    setIsSubmitting(false);
   };
+
+  const isLoading = parentLoading || isSubmitting;
 
   const handleImageChange = (event) => {
     setImg(event.target.files[0]);
   };
+
   return (
-    <div className="card-body">
-      <form onSubmit={handleSubmit}>
+    <div className="card-body" style={{ position: "relative" }}>
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+            borderRadius: "8px",
+          }}
+        >
+          <div className="text-center">
+            <FontAwesomeIcon
+              icon={faSpinner}
+              spin
+              style={{
+                fontSize: "48px",
+                color: color.primary,
+                marginBottom: "16px",
+              }}
+            />
+            <h5 style={{ color: color.primary, fontWeight: "bold" }}>
+              {parentLoading ? "Đang điền thông tin..." : "Đang xử lý..."}
+            </h5>
+            <p className="text-muted">Vui lòng đợi trong giây lát</p>
+          </div>
+        </div>
+      )}
+
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          filter: isLoading ? "blur(2px)" : "none",
+          pointerEvents: isLoading ? "none" : "auto",
+          transition: "all 0.3s ease",
+        }}
+      >
         <div className="row mb-3">
           <div className="col-md-6">
             <label className="form-label" style={{ fontWeight: "bold" }}>
@@ -210,20 +272,21 @@ const EventForm = ({ event }) => {
           <label className="form-label" style={{ fontWeight: "bold" }}>
             Miêu tả sự kiện
           </label>
-          <input
-            type="text"
+          <textarea
             className="form-control"
             name="MieuTa"
             value={formData.MieuTa}
             onChange={handleChange}
             required
+            rows={4}
+            style={{ resize: "vertical" }}
           />
         </div>
         <div className="row">
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label" style={{ fontWeight: "bold" }}>
-                Ngày Bắt Đầu
+                Ngày bắt đầu
               </label>
               <input
                 type="datetime-local"
@@ -237,7 +300,7 @@ const EventForm = ({ event }) => {
           </div>
           <div className="col-md-6">
             <label className="form-label" style={{ fontWeight: "bold" }}>
-              Ngày Kết Thúc
+              Ngày kết thúc
             </label>
             <input
               type="datetime-local"
@@ -248,33 +311,63 @@ const EventForm = ({ event }) => {
               required
             />
           </div>
-          <div className="mb-3">
-            <label className="form-label" style={{ fontWeight: "bold" }}>
-              Hình ảnh sự kiện
-            </label>
-            <input
-              type="file"
-              className="form-control"
-              onChange={handleImageChange}
-            />
-          </div>
+        </div>
+        <div className="mb-3">
+          <label className="form-label" style={{ fontWeight: "bold" }}>
+            Qũy sự kiện (nếu có)
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            name="Quy"
+            value={formData.Quy}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label" style={{ fontWeight: "bold" }}>
+            Hình ảnh sự kiện
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            onChange={handleImageChange}
+          />
         </div>
 
         <AddressForm formData={formData} handleChange={handleChange} />
 
         <button
           type="submit"
-          className="btn btn-primary w-100"
+          disabled={isLoading}
+          className="btn w-100"
           style={{
-            backgroundColor: color.primary,
+            backgroundColor: isLoading ? "#6c757d" : color.primary,
             color: "#fff",
-            borderRadius: "1rem",
-            padding: "0.8rem",
+            borderRadius: "12px",
+            padding: "12px",
             border: "none",
             marginBottom: "6rem",
+            fontSize: "16px",
+            fontWeight: "bold",
+            transition: "all 0.3s ease",
+            cursor: isLoading ? "not-allowed" : "pointer",
           }}
         >
-          {event ? "Sửa thông tin" : "Thêm sự kiện"}
+          {isLoading ? (
+            <>
+              <FontAwesomeIcon icon={faSpinner} spin className="me-2" />
+              {parentLoading ? "Đang điền thông tin..." : "Đang xử lý..."}
+            </>
+          ) : (
+            <>
+              <FontAwesomeIcon
+                icon={event ? faEdit : faPlus}
+                className="me-2"
+              />
+              XÁC NHẬN
+            </>
+          )}
         </button>
       </form>
     </div>

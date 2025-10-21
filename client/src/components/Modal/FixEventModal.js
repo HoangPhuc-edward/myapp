@@ -12,7 +12,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import "react-circular-progressbar/dist/styles.css";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import color from "../../assets/color";
 import EventForm from "../Form/EventForm";
 

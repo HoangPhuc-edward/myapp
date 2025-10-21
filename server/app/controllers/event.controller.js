@@ -43,6 +43,11 @@ class EventController {
         SoLuongToiDa,
         MaDiaDiem,
         HinhAnh,
+        Quy = 0,
+        SoNha,
+        TenDuong,
+        KhuVuc,
+        MaPhuongXa,
       } = req.body;
       if (
         !MaToChuc ||
@@ -53,7 +58,11 @@ class EventController {
         !NgayKetThuc ||
         !SoLuongToiDa ||
         !MaDiaDiem ||
-        !HinhAnh
+        !HinhAnh ||
+        !SoNha ||
+        !TenDuong ||
+        !KhuVuc ||
+        !MaPhuongXa
       ) {
         return res.status(400).json({ message: "Missing required fields" });
       }
@@ -67,7 +76,12 @@ class EventController {
         NgayKetThuc,
         SoLuongToiDa,
         MaDiaDiem,
-        HinhAnh
+        HinhAnh,
+        Quy,
+        SoNha,
+        TenDuong,
+        KhuVuc,
+        MaPhuongXa
       );
       res.status(201).json(event);
     } catch (error) {
@@ -89,7 +103,12 @@ class EventController {
         SoLuongToiDa,
         MaDiaDiem,
         HinhAnh,
+        Quy = 0,
         TrangThai,
+        SoNha,
+        TenDuong,
+        KhuVuc,
+        MaPhuongXa,
       } = req.body;
 
       if (
@@ -103,7 +122,11 @@ class EventController {
         !SoLuongToiDa ||
         !MaDiaDiem ||
         !HinhAnh ||
-        !TrangThai
+        !TrangThai ||
+        !SoNha ||
+        !TenDuong ||
+        !KhuVuc ||
+        !MaPhuongXa
       ) {
         return res.status(400).json({ message: "Missing required fields" });
       }
@@ -113,13 +136,17 @@ class EventController {
         MaToChuc,
         TenSuKien,
         MieuTa,
-        NgayDang,
         NgayBatDau,
         NgayKetThuc,
         SoLuongToiDa,
         MaDiaDiem,
         HinhAnh,
-        TrangThai
+        Quy,
+        TrangThai,
+        SoNha,
+        TenDuong,
+        KhuVuc,
+        MaPhuongXa
       );
       res.status(200).json(event);
     } catch (error) {
@@ -137,6 +164,36 @@ class EventController {
 
       const event = await EventService.hideEvent(MaSuKien);
       res.status(200).json(event);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async tinhTongTien(req, res) {
+    try {
+      const MaSuKien = req.params.id;
+      if (!MaSuKien) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const total = await EventService.tinhTongTien(MaSuKien);
+      res.status(200).json(total);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async tinhTienConLai(req, res) {
+    try {
+      const MaSuKien = req.params.id;
+      if (!MaSuKien) {
+        res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const remaining = await EventService.tinhTienConLai(MaSuKien);
+      res.status(200).json(remaining);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: error.message });

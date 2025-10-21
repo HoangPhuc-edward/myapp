@@ -10,6 +10,7 @@ const firebaseConfig = {
   messagingSenderId: "111498054571",
   appId: "1:111498054571:web:4919fdb8509f7ea49ae0ee",
   measurementId: "G-DHV9PH378L",
+  continueUrl: "http://localhost:3000/verification",
 };
 
 const app = initializeApp(firebaseConfig);

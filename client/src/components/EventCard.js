@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import { faLocationArrow, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import color from "../assets/color";
 import { getImageURL } from "../firebase/storage";
 
 const EventCard = ({ event, moveToEventDetail, index }) => {
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
   const getDateTime = (myDate) => {
     const result = myDate.split("-");
     return [result[0], `Th${result[1]}`];
+  };
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  const handleImageError = () => {
+    setImageLoading(false);
+    setImageError(true);
   };
   return (
     <div
@@ -16,6 +28,19 @@ const EventCard = ({ event, moveToEventDetail, index }) => {
       className="card mb-3"
       style={{ borderRadius: "1rem" }}
     >
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          
+          .loading-spinner {
+            animation: spin 1s linear infinite;
+            color: #999;
+          }
+        `}
+      </style>
       <div className="w-100">
         <div
           className="d-flex flex-column justify-content-center align-items-center position-absolute"
@@ -28,6 +53,7 @@ const EventCard = ({ event, moveToEventDetail, index }) => {
             width: "4rem",
             aspectRatio: "1",
             borderRadius: "1rem",
+            zIndex: 2,
           }}
         >
           <span
@@ -48,17 +74,65 @@ const EventCard = ({ event, moveToEventDetail, index }) => {
         </div>
         <div
           className="w-100"
-          style={{ borderRadius: "1rem", height: "10rem", overflow: "hidden" }}
+          style={{
+            borderRadius: "1rem",
+            height: "10rem",
+            overflow: "hidden",
+            position: "relative",
+          }}
         >
-          <img
-            src={event.HinhAnh}
-            alt=""
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
+          {imageLoading && (
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#f5f5f5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 1,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="loading-spinner"
+                style={{ fontSize: "1.5rem" }}
+              />
+            </div>
+          )}
+          {imageError ? (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#f5f5f5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#999",
+                fontSize: "14px",
+              }}
+            >
+              Không thể tải ảnh
+            </div>
+          ) : (
+            <img
+              src={event.HinhAnh}
+              alt={event.TenSuKien}
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: imageLoading ? 0 : 1,
+                transition: "opacity 0.3s ease-in-out",
+              }}
+            />
+          )}
         </div>
       </div>
       <div className="card-body">

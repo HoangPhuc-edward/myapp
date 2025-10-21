@@ -39,8 +39,19 @@ class VolunteerController {
 
   static async createVolunteer(req, res) {
     try {
-      const { HoTen, NgaySinh, SDT, GioiTinh, MaDiaChi, Email, HinhAnh } =
-        req.body;
+      const {
+        HoTen,
+        NgaySinh,
+        SDT,
+        GioiTinh,
+        MaDiaChi,
+        Email,
+        HinhAnh,
+        SoNha,
+        TenDuong,
+        KhuVuc,
+        MaPhuongXa,
+      } = req.body;
       if (
         !HoTen ||
         !NgaySinh ||
@@ -48,7 +59,11 @@ class VolunteerController {
         !GioiTinh ||
         !MaDiaChi ||
         !Email ||
-        !HinhAnh
+        !HinhAnh ||
+        !SoNha ||
+        !TenDuong ||
+        !KhuVuc ||
+        !MaPhuongXa
       ) {
         return res.status(400).json({ error: "Missing required information" });
       }
@@ -59,7 +74,11 @@ class VolunteerController {
         GioiTinh,
         MaDiaChi,
         Email,
-        HinhAnh
+        HinhAnh,
+        SoNha,
+        TenDuong,
+        KhuVuc,
+        MaPhuongXa
       );
       return res.status(201).json(volunteer);
     } catch (err) {

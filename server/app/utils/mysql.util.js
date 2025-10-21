@@ -12,6 +12,7 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
   namedPlaceholders: true,
+  multipleStatements: true,
 });
 
 // Kiểm tra xem pool có kết nối được không

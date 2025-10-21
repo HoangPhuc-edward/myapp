@@ -30,24 +30,18 @@ const VolunteerInfo = () => {
   });
 
   const addUserToDatabase = async (formData) => {
-    const addressData = {
-      SoNha: formData.SoNha,
-      TenDuong: formData.TenDuong,
-      KhuVuc: formData.KhuVuc,
-      MaPhuongXa: formData.MaPhuongXa,
-      GhiChu: "Khong co ghi chu",
-    };
-
-    const addressId = await AddressApi.addAddress(addressData);
-
     const userData = {
       HoTen: formData.HoTen,
       NgaySinh: formData.NgaySinh,
       SDT: formData.SDT,
       GioiTinh: formData.GioiTinh,
-      MaDiaChi: addressId,
+      MaDiaChi: 1,
       Email: formData.email,
       HinhAnh: formData.HinhAnh,
+      SoNha: formData.SoNha,
+      TenDuong: formData.TenDuong,
+      KhuVuc: formData.KhuVuc,
+      MaPhuongXa: formData.MaPhuongXa,
     };
 
     const userId = await VolunteerApi.addVolunteer(userData);

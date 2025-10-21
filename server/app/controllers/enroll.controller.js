@@ -72,6 +72,16 @@ class EnrollController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  static async getVolunteerEnrollByMSK(req, res) {
+    try {
+      const MSK = req.params.id;
+      const enrolls = await EnrollService.getVolunteerEnrollByMSK(MSK);
+      res.status(200).json(enrolls);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = EnrollController;

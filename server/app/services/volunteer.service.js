@@ -32,11 +32,15 @@ class VolunteerService {
     GioiTinh,
     MaDiaChi,
     Email,
-    HinhAnh
+    HinhAnh,
+    SoNha,
+    TenDuong,
+    KhuVuc,
+    MaPhuongXa
   ) {
     try {
       const [rows] = await pool.execute(
-        `INSERT INTO my_database.TINH_NGUYEN_VIEN (HoTen, NgaySinh, SDT, GioiTinh, MaDiaChi,Email, HinhAnh) VALUES ('${HoTen}', '${NgaySinh}', '${SDT}', '${GioiTinh}', ${MaDiaChi}, '${Email}', '${HinhAnh}');`
+        `INSERT INTO my_database.TINH_NGUYEN_VIEN (HoTen, NgaySinh, SDT, GioiTinh, MaDiaChi,Email, HinhAnh, SoNha, TenDuong, KhuVuc, MaPhuongXa) VALUES ('${HoTen}', '${NgaySinh}', '${SDT}', '${GioiTinh}', ${MaDiaChi}, '${Email}', '${HinhAnh}', ${SoNha}, '${TenDuong}', '${KhuVuc}', ${MaPhuongXa});`
       );
       return rows;
     } catch (err) {

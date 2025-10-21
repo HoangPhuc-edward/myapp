@@ -51,6 +51,11 @@ class EnrollApi {
     }
     return contacts;
   }
+
+  static async getVolunteersByEventId(MaSuKien) {
+    const volunteers = await getValuesFromDB(`enrolls/mskvol/${MaSuKien}`);
+    return volunteers;
+  }
 }
 
 export default EnrollApi;

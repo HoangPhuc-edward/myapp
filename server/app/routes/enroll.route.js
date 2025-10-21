@@ -9,6 +9,7 @@ router
 
 router.get("/:id", EnrollController.getEnrollsById);
 router.get("/msk/:id", EnrollController.getEnrollByMSK);
+router.get("/mskvol/:id", EnrollController.getVolunteerEnrollByMSK);
 router.get("/search/:attribute/:value", EnrollController.getEnrollByAttribute);
 router.delete("/:id", EnrollController.deleteEnroll);
 

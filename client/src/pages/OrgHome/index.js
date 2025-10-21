@@ -18,9 +18,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
   faCity,
+  faCoins,
   faGear,
   faHome,
   faMessage,
+  faMoneyBill,
+  faPaperclip,
   faPlus,
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
@@ -36,6 +39,9 @@ import AddEventFormPage from "../../components/MiniPage/AddEventFormPage";
 import EventListPage from "../../components/MiniPage/EventListPage";
 import AnalyzeOrgPage from "../../components/MiniPage/AnalyzeOrgPage";
 import ChatPage from "../../components/MiniPage/ChatPage";
+import PaymentPage from "../../components/MiniPage/PaymentPage";
+import EvaluationPage from "../../components/MiniPage/EvaluationPage";
+import OrgDonationPage from "../../components/MiniPage/OrgDonationPage";
 
 const SideBarElement = ({ content, icon, name, showName, handleClick }) => {
   return (
@@ -90,9 +96,24 @@ const OrgHome = () => {
       name: "Sự kiện của bạn",
     },
     {
+      icon: faCoins,
+      content: "Donations",
+      name: "Quyên góp",
+    },
+    {
       icon: faGear,
       content: "Analytics",
       name: "Thống kê",
+    },
+    {
+      icon: faMoneyBill,
+      content: "Payments",
+      name: "Thu chi sự kiện",
+    },
+    {
+      icon: faPaperclip,
+      content: "Evaluate",
+      name: "Đánh giá sự kiện",
     },
     {
       icon: faMessage,
@@ -131,15 +152,13 @@ const OrgHome = () => {
 
     const myOrg = await OrgApi.getOrgById(my_id);
 
-    const myAddress = await AddressApi.getAddressById(myOrg.MaDiaChi);
-    const myLocation = await LocationApi.getLocationByWardId(
-      myAddress.MaPhuongXa
-    );
+    // const myAddress = await AddressApi.getAddressById(myOrg.MaDiaChi);
+    const myLocation = await LocationApi.getLocationByWardId(myOrg.MaPhuongXa);
 
     const addressData = {
-      SoNha: myAddress.SoNha,
-      TenDuong: myAddress.TenDuong,
-      KhuVuc: myAddress.KhuVuc,
+      SoNha: myOrg.SoNha,
+      TenDuong: myOrg.TenDuong,
+      KhuVuc: myOrg.KhuVuc,
       province: myLocation.province,
       district: myLocation.district,
       ward: myLocation.ward,
@@ -296,6 +315,9 @@ const OrgHome = () => {
               {content === "Analytics" && <AnalyzeOrgPage />}
               {content === "AddEvent" && <AddEventFormPage org={org} />}
               {content === "Chats" && <ChatPage type={"org"} />}
+              {content === "Evaluate" && <EvaluationPage org={org} />}
+              {content === "Payments" && <PaymentPage org={org} />}
+              {content === "Donations" && <OrgDonationPage org={org} />}
             </div>
           </div>
         </div>

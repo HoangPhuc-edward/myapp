@@ -11,6 +11,10 @@ class VolunteerApi {
       MaDiaChi: parseInt(data.MaDiaChi, 10),
       Email: data.Email,
       HinhAnh: data.HinhAnh,
+      SoNha: data.SoNha || "Không",
+      TenDuong: data.TenDuong || "Không",
+      KhuVuc: data.KhuVuc || "Không",
+      MaPhuongXa: data.MaPhuongXa || "Không",
     };
 
     return await addValuesToDB("volunteers", JSON.stringify(volunteerData));

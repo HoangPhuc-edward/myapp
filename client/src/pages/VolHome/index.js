@@ -19,6 +19,7 @@ import {
   faBell,
   faHome,
   faMessage,
+  faMoneyBill,
   faSignOut,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +35,7 @@ import VolAboutPage from "../../components/MiniPage/VolAboutPage";
 import EventListPage from "../../components/MiniPage/EventListPage";
 import ChatPage from "../../components/MiniPage/ChatPage";
 import ChatEventPage from "../../components/MiniPage/ChatEventPage";
+import VolDonationPage from "../../components/MiniPage/VolDonationPage";
 
 const SideBarElement = ({ content, icon, name, showName, handleClick }) => {
   return (
@@ -81,6 +83,11 @@ const VolHome = () => {
       icon: faBell,
       content: "Events",
       name: "Sự kiện đã tham gia",
+    },
+    {
+      icon: faMoneyBill,
+      content: "Donations",
+      name: "Quyên góp",
     },
     {
       icon: faMessage,
@@ -179,15 +186,13 @@ const VolHome = () => {
     }
 
     const myVol = await VolunteerApi.getVolById(my_id);
-    const myAddress = await AddressApi.getAddressById(myVol.MaDiaChi);
-    const myLocation = await LocationApi.getLocationByWardId(
-      myAddress.MaPhuongXa
-    );
+    // const myAddress = await AddressApi.getAddressById(myVol.MaDiaChi);
+    const myLocation = await LocationApi.getLocationByWardId(myVol.MaPhuongXa);
 
     const addressData = {
-      SoNha: myAddress.SoNha,
-      TenDuong: myAddress.TenDuong,
-      KhuVuc: myAddress.KhuVuc,
+      SoNha: myVol.SoNha,
+      TenDuong: myVol.TenDuong,
+      KhuVuc: myVol.KhuVuc,
       province: myLocation.province,
       district: myLocation.district,
       ward: myLocation.ward,
@@ -198,7 +203,7 @@ const VolHome = () => {
     setAddress(address);
 
     myVol.DiaChi = address;
-    myVol.MaTinhThanh = myAddress.MaPhuongXa;
+    myVol.MaTinhThanh = myLocation.province;
     setVol(myVol);
   };
 
@@ -349,6 +354,7 @@ const VolHome = () => {
               {content === "Events" && (
                 <EventListPage handleEventClick={handleEventClick} type="vol" />
               )}
+              {content === "Donations" && <VolDonationPage vol={vol} />}
               {content === "Chats" && <ChatPage type="volunteer" />}
             </div>
           </div>

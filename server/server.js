@@ -12,6 +12,9 @@ const addressRoutes = require("./app/routes/address.route");
 const eventRoutes = require("./app/routes/event.route");
 const enrollRoutes = require("./app/routes/enroll.route");
 const messageRoutes = require("./app/routes/message.route");
+const donationRoutes = require("./app/routes/donation.route");
+const paymentRoutes = require("./app/routes/payment.route");
+const evaluationRoutes = require("./app/routes/evaluation.route");
 
 app.use(cors());
 app.use(express.json());
@@ -25,6 +28,9 @@ app.use("/addresses", addressRoutes);
 app.use("/events", eventRoutes);
 app.use("/enrolls", enrollRoutes);
 app.use("/messages", messageRoutes);
+app.use("/donations", donationRoutes);
+app.use("/payments", paymentRoutes);
+app.use("/evaluations", evaluationRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

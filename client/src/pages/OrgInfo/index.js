@@ -32,23 +32,20 @@ const OrgInfo = () => {
   });
 
   const addOrgToDatabase = async (formData) => {
-    const addressData = {
-      SoNha: formData.SoNha,
-      TenDuong: formData.TenDuong,
-      KhuVuc: formData.KhuVuc,
-      MaPhuongXa: formData.MaPhuongXa,
-      GhiChu: "Khong co ghi chu",
-    };
-
-    const addressId = await AddressApi.addAddress(addressData);
-
+    if (!formData.SoNha || !formData.TenDuong || !formData.KhuVuc) {
+      alert("Địa chỉ không được để trống!");
+      return;
+    }
     const orgData = {
       Ten: formData.Ten,
       MieuTa: formData.MieuTa,
       SDT: formData.SDT,
-      MaDiaChi: addressId,
       Email: email,
       HinhAnh: formData.HinhAnh,
+      SoNha: formData.SoNha,
+      TenDuong: formData.TenDuong,
+      KhuVuc: formData.KhuVuc,
+      MaPhuongXa: formData.MaPhuongXa,
     };
 
     const userId = await OrgApi.addOrg(orgData);

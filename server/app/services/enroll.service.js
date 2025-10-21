@@ -47,6 +47,26 @@ class EnrollService {
       throw err;
     }
   }
-}
 
+  static async getVolunteerEnrollByMSK(MSK) {
+    try {
+      const query = `SELECT PDK.MaSo, 
+  PDK.MaTNV,
+  PDK.MaSuKien,
+  TNV.MaSo AS TNV_MaSo, 
+  TNV.HoTen,
+  Email, HinhAnh, GioiTinh, SDT, NgaySinh
+FROM PHIEU_DANG_KY PDK
+JOIN TINH_NGUYEN_VIEN TNV
+ON PDK.MaTNV = TNV.MaSo
+WHERE PDK.MaSuKien = ${MSK};
+`;
+      const [rows] = await pool.execute(query);
+      return rows;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+}
 module.exports = EnrollService;

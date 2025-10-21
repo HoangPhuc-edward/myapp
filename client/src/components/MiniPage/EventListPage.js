@@ -6,6 +6,7 @@ import {
   faArrowLeft,
   faArrowRight,
   faSearch,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import SmallEventCard from "../SmallEventCard";
 import EventApi from "../../api/eventApi";
@@ -26,6 +27,7 @@ import useModal from "../../hooks/useModal";
 const EventListPage = ({ handleEventClick, type }) => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [show, setShow] = useState("all");
   const [upcomingEvents, setUpcomingEvents] = useState([]);
@@ -52,9 +54,13 @@ const EventListPage = ({ handleEventClick, type }) => {
   };
 
   const fetchData = async (searchTerm) => {
+    setIsLoading(true);
     let events = [];
     const newUser = await getUser();
-    if (newUser === null) return;
+    if (newUser === null) {
+      setIsLoading(false);
+      return;
+    }
 
     if (type === "org") {
       const my_id = await OrgApi.getOrgIdByEmail(newUser.email);
@@ -67,9 +73,9 @@ const EventListPage = ({ handleEventClick, type }) => {
     const updatedEvents = await Promise.all(
       events.map(async (event) => {
         const tochuc = await OrgApi.getOrgById(event.MaToChuc);
-        const address = await AddressApi.getAddressById(event.MaDiaDiem);
+        // const address = await AddressApi.getAddressById(event.MaDiaDiem);
         const location = await LocationApi.getLocationByWardId(
-          address.MaPhuongXa
+          event.MaPhuongXa
         );
         const updatedNgayBatDau = formatDateTime(event.NgayBatDau);
         const updatedNgayKetThuc = formatDateTime(event.NgayKetThuc);
@@ -95,6 +101,7 @@ const EventListPage = ({ handleEventClick, type }) => {
     setEvents(filteredEvents);
     setSelectedEvents(filteredEvents);
     splitEventByDate(filteredEvents);
+    setIsLoading(false);
   };
 
   const splitEventByDate = (events) => {
@@ -266,18 +273,80 @@ const EventListPage = ({ handleEventClick, type }) => {
         </div>
       </div>
 
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          
+          .loading-spinner {
+            animation: spin 1s linear infinite;
+            color: ${color.primary};
+          }
+
+          .loading-small-card {
+            background: #f8f9fa;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e9ecef;
+          }
+        `}
+      </style>
+
       <div className="row">
-        {currentEvents.map((event, index) => (
-          <div className="col-md-12" key={index}>
-            <SmallEventCard
-              event={event}
-              moveToEventDetail={handleEventClick}
-              index={index}
-              type={type}
-              fix_func={handleShowModal}
-            />
+        {isLoading ? (
+          // Loading skeleton for SmallEventCard
+          Array.from({ length: 3 }).map((_, index) => (
+            <div className="col-md-12" key={index}>
+              <div className="loading-small-card">
+                <div style={{ textAlign: "center" }}>
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    className="loading-spinner"
+                    style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}
+                  />
+                  <div style={{ color: "#6c757d", fontSize: "14px" }}>
+                    Đang tải sự kiện...
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : currentEvents.length > 0 ? (
+          currentEvents.map((event, index) => (
+            <div className="col-md-12" key={index}>
+              <SmallEventCard
+                event={event}
+                moveToEventDetail={handleEventClick}
+                index={index}
+                type={type}
+                fix_func={handleShowModal}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="col-12">
+            <div
+              style={{
+                textAlign: "center",
+                padding: "3rem",
+                color: "#6c757d",
+                backgroundColor: "#f8f9fa",
+                borderRadius: "1rem",
+                border: "1px solid #e9ecef",
+              }}
+            >
+              <h5>Không tìm thấy sự kiện nào</h5>
+              <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+            </div>
           </div>
-        ))}
+        )}
       </div>
 
       <div className="d-flex justify-content-center mt-4">

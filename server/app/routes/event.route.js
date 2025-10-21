@@ -10,6 +10,8 @@ router
   .put(EventController.updateEvent);
 
 router.get("/:id", EventController.getEventsById);
+router.get("/tongtien/:id", EventController.tinhTongTien);
+router.get("/conlai/:id", EventController.tinhTienConLai);
 router.get("/search/:attribute/:value", EventController.getEventsByAttribute);
 router.get("/hide/:id", EventController.hideEvent);
 module.exports = router;

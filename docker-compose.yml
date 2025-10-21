@@ -20,6 +20,7 @@ services:
       MYSQL_DATABASE: my_database
       MYSQL_USER: hoangphuc
       MYSQL_PASSWORD: hoangphuc
+    command: --log-bin-trust-function-creators=1
     ports:
       - "3307:3306"  
     networks:

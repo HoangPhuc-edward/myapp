@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendar,
@@ -7,6 +7,7 @@ import {
   faTrash,
   faUser,
   faUserAlt,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 
 import color from "../assets/color";
@@ -19,6 +20,18 @@ const SmallEventCard = ({
   type,
   fix_func = null,
 }) => {
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  const handleImageError = () => {
+    setImageLoading(false);
+    setImageError(true);
+  };
+
   const hide_func = async (event) => {
     const ans = window.confirm("Bạn có chắc chắn muốn xóa sự kiện này không?");
     if (!ans) return;
@@ -35,14 +48,55 @@ const SmallEventCard = ({
 
   return (
     <div className="card mb-3 p-2" style={{ borderRadius: "1rem" }}>
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          
+          .loading-spinner {
+            animation: spin 1s linear infinite;
+            color: #999;
+          }
+        `}
+      </style>
       <div
         className="row w-100 ms-1 d-flex flex-row justify-content-center align-items-center"
         onClick={() => moveToEventDetail(event)}
       >
-        <div className="col-md-4 p-0" style={{ borderRadius: "1rem" }}>
+        <div
+          className="col-md-4 p-0"
+          style={{ borderRadius: "1rem", position: "relative" }}
+        >
+          {imageLoading && (
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "1rem",
+                zIndex: 1,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="loading-spinner"
+                style={{ fontSize: "1.2rem" }}
+              />
+            </div>
+          )}
           <img
             src={event.HinhAnh}
-            alt=""
+            alt={event.TenSuKien}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
             style={{
               width: "100%",
               height: "100%",

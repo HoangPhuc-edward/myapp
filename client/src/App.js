@@ -7,6 +7,7 @@ import OrgInfo from "./pages/OrgInfo/index";
 import VolunteerInfo from "./pages/VolunteerInfo";
 import OrgHome from "./pages/OrgHome";
 import VolHome from "./pages/VolHome";
+import CaptureFromIPWebcam from "./pages/CaptureFromIPWebcam";
 
 import {
   BrowserRouter as Router,
@@ -15,6 +16,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Intro from "./pages/Intro";
+import VerificationPage from "./pages/VerificationPage";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/vol-info" element={<VolunteerInfo />} />
         <Route path="/org-home" element={<OrgHome />} />
         <Route path="/vol-home" element={<VolHome />} />
+        <Route path="/capture" element={<CaptureFromIPWebcam />} />
+        <Route path="/verification" element={<VerificationPage />} />
       </Routes>
     </Router>
   );

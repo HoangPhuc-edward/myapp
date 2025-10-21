@@ -6,6 +6,7 @@ import {
   faArrowLeft,
   faArrowRight,
   faSearch,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import EventCard from "../EventCard";
 import {
@@ -15,7 +16,7 @@ import {
 } from "../../utils/format";
 import EventApi from "../../api/eventApi";
 import OrgApi from "../../api/orgApi";
-import AddressApi from "../../api/addressApi";
+
 import LocationApi from "../../api/locationApi";
 import EnrollApi from "../../api/enrollApi";
 
@@ -26,6 +27,7 @@ const EventHomePage = ({ handleEventClick }) => {
   const [ongoingEvents, setOngoingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [type, setType] = useState("all");
 
@@ -43,13 +45,14 @@ const EventHomePage = ({ handleEventClick }) => {
   );
 
   const fetchData = async () => {
+    setIsLoading(true);
     const events = await EventApi.getAllEvents();
     const updatedEvents = await Promise.all(
       events.map(async (event) => {
         const tochuc = await OrgApi.getOrgById(event.MaToChuc);
-        const address = await AddressApi.getAddressById(event.MaDiaDiem);
+        // const address = await AddressApi.getAddressById(event.MaDiaDiem);
         const location = await LocationApi.getLocationByWardId(
-          address.MaPhuongXa
+          event.MaPhuongXa
         );
         const updatedNgayBatDau = formatDateTime(event.NgayBatDau);
         const updatedNgayKetThuc = formatDateTime(event.NgayKetThuc);
@@ -77,6 +80,7 @@ const EventHomePage = ({ handleEventClick }) => {
     setEvents(updatedEvents);
     setFilteredEvents(updatedEvents);
     setSelectedEvents(updatedEvents);
+    setIsLoading(false);
   };
 
   const handlePageChange = (page) => {
@@ -291,16 +295,77 @@ const EventHomePage = ({ handleEventClick }) => {
           </button>
         </div>
       </div>
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          
+          .loading-spinner {
+            animation: spin 1s linear infinite;
+            color: ${color.primary};
+          }
+
+          .loading-card {
+            background: #f8f9fa;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e9ecef;
+          }
+        `}
+      </style>
       <div className="row">
-        {currentEvents.map((event, index) => (
-          <div className="col-md-6" key={index}>
-            <EventCard
-              event={event}
-              moveToEventDetail={handleEventClick}
-              index={index}
-            />
+        {isLoading ? (
+          // Loading skeleton
+          Array.from({ length: 4 }).map((_, index) => (
+            <div className="col-md-6" key={index}>
+              <div className="loading-card">
+                <div style={{ textAlign: "center" }}>
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    className="loading-spinner"
+                    style={{ fontSize: "2rem", marginBottom: "1rem" }}
+                  />
+                  <div style={{ color: "#6c757d", fontSize: "14px" }}>
+                    Đang tải sự kiện...
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : currentEvents.length > 0 ? (
+          currentEvents.map((event, index) => (
+            <div className="col-md-6" key={index}>
+              <EventCard
+                event={event}
+                moveToEventDetail={handleEventClick}
+                index={index}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="col-12">
+            <div
+              style={{
+                textAlign: "center",
+                padding: "3rem",
+                color: "#6c757d",
+                backgroundColor: "#f8f9fa",
+                borderRadius: "1rem",
+                border: "1px solid #e9ecef",
+              }}
+            >
+              <h5>Không tìm thấy sự kiện nào</h5>
+              <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+            </div>
           </div>
-        ))}
+        )}
       </div>
       <div className="d-flex justify-content-center mt-4">
         <nav>

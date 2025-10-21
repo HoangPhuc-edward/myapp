@@ -18,6 +18,8 @@ import color from "../../assets/color";
 import EnrollApi from "../../api/enrollApi";
 import EventVolunteerList from "../List/EventVolunteerList";
 import MessageApi from "../../api/messageApi";
+import EventApi from "../../api/eventApi";
+import DonationModal from "./DonationModal";
 
 const EventModal = ({
   isShowing,
@@ -31,6 +33,8 @@ const EventModal = ({
   const [takenSpots, setTakenSpots] = useState(0);
   const [percentage, setPercentage] = useState("1.0");
   const [checkEnroll, setCheckEnroll] = useState(false);
+  const [quy, setQuy] = useState(0);
+  const [showDonationModal, setShowDonationModal] = useState(false);
 
   useEffect(() => {
     const check = async () => {
@@ -47,8 +51,16 @@ const EventModal = ({
 
       setCheckEnroll(checkEnrolled);
     };
+    const fetchQuy = async () => {
+      if (!event) return;
+      const money = await EventApi.getTongTienByEventId(event.MaSuKien);
+      console.log("Money:", money);
+      setQuy(money || 0);
+    };
+
     check();
-  }, [event, user]);
+    fetchQuy();
+  }, [event, user, showDonationModal]); // Add showDonationModal dependency to refresh after donation
 
   const func = async () => {
     if (checkEnroll) {
@@ -139,6 +151,23 @@ const EventModal = ({
                       onClick={() => func(event)}
                     >
                       {checkEnroll ? "Hủy đăng ký" : "Đăng ký"}
+                    </button>
+                    <button
+                      style={{
+                        backgroundColor: "#28a745",
+                        color: "white",
+                        border: "none",
+                        padding: "0.5rem 1rem",
+                        width: "100%",
+                        borderRadius: "1rem",
+                        cursor: "pointer",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                        margin: "0.5rem 0",
+                      }}
+                      onClick={() => setShowDonationModal(true)}
+                    >
+                      Quyên góp
                     </button>
                     <div className="d-flex flex-row align-items-center justify-content-between">
                       <div style={{ width: "2rem" }}>
@@ -267,6 +296,30 @@ const EventModal = ({
                     </p>
                   </div>
                 </div>
+
+                <div
+                  className="border mt-3 p-3"
+                  style={{ borderRadius: "1rem" }}
+                >
+                  <div className="d-flex flex-row align-items-center mt-1">
+                    <FontAwesomeIcon icon={faCalendar} />
+                    <p className="mb-0 ms-2" style={{ fontWeight: "bold" }}>
+                      Số tiền quỹ hiện tại
+                    </p>
+                  </div>
+
+                  <div
+                    className="p-1 m-1 d-flex align-items-center justify-content-center"
+                    style={{
+                      backgroundColor: color.lightPrimary,
+                      borderRadius: "1rem",
+                    }}
+                  >
+                    <p className="mb-0" style={{ fontWeight: "bold" }}>
+                      {quy}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div
@@ -328,6 +381,14 @@ const EventModal = ({
               )}
             </div>
           </div>
+
+          {/* Donation Modal */}
+          <DonationModal
+            isShowing={showDonationModal}
+            hide={() => setShowDonationModal(false)}
+            MaSK={event?.MaSuKien}
+            MaTNV={user?.MaSo}
+          />
         </React.Fragment>,
         document.body
       )

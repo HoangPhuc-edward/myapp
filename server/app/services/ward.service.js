@@ -3,9 +3,7 @@ const pool = require("../utils/mysql.util");
 class WardService {
   static async getAllWards() {
     try {
-      const [rows] = await pool.execute(
-        "SELECT MaSo, Ten FROM my_database.PHUONG_XA;"
-      );
+      const [rows] = await pool.execute("SELECT * FROM my_database.PHUONG_XA;");
       return rows;
     } catch (err) {
       console.error("Error fetching data from MySQL:", err);

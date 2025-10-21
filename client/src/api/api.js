@@ -15,6 +15,7 @@ const addValuesToDB = async (api, api_data) => {
     const data = await response.json();
     return data.insertId;
   } catch (error) {
+    console.error("Data:", api_data);
     console.error("Error:", error);
     throw error;
   }

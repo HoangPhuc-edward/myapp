@@ -10,6 +10,7 @@ import { formatDateTime } from "../../utils/format";
 import {
   faArrowRight,
   faLessThanEqual,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import font from "../../assets/font";
 import color from "../../assets/color";
@@ -21,6 +22,8 @@ const ChatEventPage = ({ type }) => {
   const [messageList, setMessageList] = useState([]);
   const [currentMessage, setCurrentMessage] = useState([]);
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [imageLoadingStates, setImageLoadingStates] = useState({});
 
   const messageEndRef = useRef(null);
   const [textMessage, setTextMessage] = useState("");
@@ -40,6 +43,7 @@ const ChatEventPage = ({ type }) => {
 
   const fetchEventAndMessage = async () => {
     if (!user) return;
+    setIsLoading(true);
     if (type === "volunteer") {
       const enrolls = await EnrollApi.getEnrollByVolunteerId(user.MaSo);
 
@@ -79,6 +83,7 @@ const ChatEventPage = ({ type }) => {
 
       setMessageList(myMessages);
     }
+    setIsLoading(false);
   };
 
   const fetchCurrentMessage = async () => {
@@ -157,6 +162,20 @@ const ChatEventPage = ({ type }) => {
       fetchEventAndMessage();
       fetchCurrentMessage();
     }
+  };
+
+  const handleImageLoad = (eventId) => {
+    setImageLoadingStates((prev) => ({
+      ...prev,
+      [eventId]: false,
+    }));
+  };
+
+  const handleImageError = (eventId) => {
+    setImageLoadingStates((prev) => ({
+      ...prev,
+      [eventId]: false,
+    }));
   };
 
   useEffect(() => {

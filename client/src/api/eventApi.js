@@ -31,7 +31,12 @@ class EventApi {
       NgayDang: new Date().toISOString().slice(0, -1),
       SoLuongToiDa: parseInt(data.SoLuongToiDa, 10),
       MaDiaDiem: parseInt(data.MaDiaDiem, 10),
+      Quy: data.Quy || 0,
       HinhAnh: data.HinhAnh,
+      SoNha: data.SoNha || null,
+      TenDuong: data.TenDuong || null,
+      KhuVuc: data.KhuVuc || null,
+      MaPhuongXa: data.MaPhuongXa || null,
     };
 
     return await addValuesToDB("events", JSON.stringify(eventData));
@@ -65,7 +70,12 @@ class EventApi {
       SoLuongToiDa: parseInt(data.SoLuongToiDa, 10),
       MaDiaDiem: parseInt(data.MaDiaDiem, 10),
       HinhAnh: data.HinhAnh,
+      Quy: data.Quy || 0,
       TrangThai: data.TrangThai,
+      SoNha: data.SoNha || null,
+      TenDuong: data.TenDuong || null,
+      KhuVuc: data.KhuVuc || null,
+      MaPhuongXa: data.MaPhuongXa || null,
     };
 
     return await updateValuesToDB("events", JSON.stringify(eventData));
@@ -73,6 +83,16 @@ class EventApi {
 
   static async hideEvent(id) {
     return await getValuesFromDB(`events/hide/${id}`);
+  }
+
+  static async getTongTienByEventId(id) {
+    const money = await getValuesFromDB(`events/tongtien/${id}`);
+    return money;
+  }
+
+  static async getMoneyLeftByEventId(id) {
+    const moneyLeft = await getValuesFromDB(`events/conlai/${id}`);
+    return moneyLeft;
   }
 }
 

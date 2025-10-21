@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import registerImg from "../../assets/img/register.png";
 import color from "../../assets/color";
 import { isValidEmail, isShorterThan } from "../../utils/validationUtils";
-import { registerUser } from "../../firebase/auth";
+import { registerAndVerifyUser, registerUser } from "../../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
@@ -37,6 +37,7 @@ const Register = () => {
 
     try {
       await registerUser(auth, email, password);
+      // await registerAndVerifyUser(auth, email, password);
     } catch (error) {
       let message = "Lỗi đăng ký tài khoản";
       if (error.code === "auth/email-already-in-use") {

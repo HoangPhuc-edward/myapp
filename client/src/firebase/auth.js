@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
@@ -53,6 +54,18 @@ const registerUser = async (auth, email, password) => {
     });
 };
 
+const registerAndVerifyUser = async (
+  auth,
+  email,
+  password,
+  continueUrl = "http://localhost:3000/verification?type=success"
+) => {
+  const cred = await createUserWithEmailAndPassword(auth, email, password);
+  await sendEmailVerification(cred.user, { url: continueUrl });
+  await signOut(auth);
+  return cred;
+};
+
 const logout = () => {
   signOut(auth)
     .then(() => {
@@ -64,4 +77,4 @@ const logout = () => {
     });
 };
 
-export { handleLogin, registerUser, getUser, logout };
+export { handleLogin, registerUser, getUser, logout, registerAndVerifyUser };

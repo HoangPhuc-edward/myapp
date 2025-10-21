@@ -7,9 +7,13 @@ class OrgApi {
       Ten: data.Ten,
       MieuTa: data.MieuTa,
       SDT: data.SDT,
-      MaDiaChi: parseInt(data.MaDiaChi, 10),
+      MaDiaChi: parseInt(data.MaDiaChi, 10) || 1,
       Email: data.Email,
       HinhAnh: data.HinhAnh,
+      SoNha: data.SoNha || "Không",
+      TenDuong: data.TenDuong || "Không",
+      KhuVuc: data.KhuVuc || "Không",
+      MaPhuongXa: data.MaPhuongXa || "Không",
     };
 
     return await addValuesToDB("orgs", JSON.stringify(orgData));
